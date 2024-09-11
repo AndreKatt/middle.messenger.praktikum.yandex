@@ -1,0 +1,26 @@
+{
+  "name": "messenger-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "start": "vite build && node server.cjs",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.4",
+    "@types/postcss-preset-env": "^8.0.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "postcss-preset-env": "^10.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "express": "^4.20.0",
+    "handlebars": "^4.7.8"
+  }
+}

@@ -69,8 +69,8 @@ export const signInTemplateProps = {
   ],
   submitButtonLabel: "Войти",
   signButton: {
+    id: "btnToSignUp",
     label: "Нет аккаунта?",
-    link: "/signUp"
   },
 };
 
@@ -79,7 +79,7 @@ export const signUpTemplateProps = {
   submitButtonLabel: "Зарегистрироваться",
   signButton: {
     label: "Войти",
-    link: "/auth"
+    id: "btnToAuth"
   },
 };
 
@@ -102,32 +102,38 @@ export const editProfileTemplateProps = {
     {
       label: "Имя",
       fieldName: "first_name",
-      data: "Марина",
+      value: "Марина",
+      type: "text",
     },
     {
       label: "Фамилия",
       fieldName: "second_name",
-      data: "Фамильная",
+      value: "Фамильная",
+      type: "text",
     },
     {
       label: "Имя в чате",
       fieldName: "display_name",
-      data: "mArInChIk",
+      value: "mArInChIk",
+      type: "text",
     },
     {
       label: "Логин",
       fieldName: "login",
-      data: "marina_name",
+      value: "marina_name",
+      type: "text",
     },
     {
       label: "Почта",
       fieldName: "email",
-      data: "pochta@yandex.ru",
+      value: "pochta@yandex.ru",
+      type: "email",
     },
     {
       label: "Телефон",
       fieldName: "phone",
-      data: "+7 (999) 999 99 99",
+      value: "+7(999)999-99-99",
+      type: "text",
     },
   ],
   submitButton: "Сохранить",
@@ -139,17 +145,19 @@ export const editPassTemplateProps = {
     {
       label: "Старый пароль",
       fieldName: "oldPassword",
+      type: "password",
     },
     {
       label: "Новый пароль",
-      fieldName: "newPassword"
+      fieldName: "newPassword",
+      type: "password",
     },
     {
       label: "Повторите новый пароль",
-      fieldName: "newPassword"
+      fieldName: "newPassword",
+      type: "password",
     },
   ],
   submitButton: "Сохранить",
   cancelButton: "Отмена",
 };
-// oldPassword, newPassword

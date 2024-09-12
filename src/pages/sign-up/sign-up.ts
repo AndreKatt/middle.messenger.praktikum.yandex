@@ -1,3 +1,5 @@
 export const SignUpPage = `
-  {{> AuthForm title="Регистрация"}}
+  <main
+    {{> AuthForm title="Регистрация"}}
+  </main>
 `;

@@ -1,5 +1,5 @@
 export const Button = `
-  <button class={{className}}>
+  <button id={{id}} class={{className}}>
     {{label}}
   </button>
 `;

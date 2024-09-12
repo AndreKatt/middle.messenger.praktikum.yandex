@@ -6,10 +6,10 @@ export const Error = `
       <h1 class="errorTitle">{{errorCode}}</h1>
       <p class="errorDescription">{{description}}</p>
       <a 
-        href="/home"
+        href="/profile"
         class="errorLink"
       >
-        Назад к чатам
+        Назад в профиль
       </a>
     </div>
   </div>

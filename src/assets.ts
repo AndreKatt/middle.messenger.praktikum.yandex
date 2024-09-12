@@ -26,26 +26,61 @@ const profileInfoItems = [
 ];
 
 const signUpFields = [
-  'Почта',
-  'Логин',
-  'Имя',
-  'Фамилия',
-  'Телефон',
-  'Пароль',
-  'Пароль (ещё раз)',
+  {
+    label: 'Почта',
+    fieldName: 'email',
+  },
+  {
+    label: 'Логин',
+    fieldName: 'login'
+  },
+  {
+    label: 'Имя',
+    fieldName: 'first_name'
+  },
+  {
+    label: 'Фамилия',
+    fieldName: 'second_name'
+  },
+  {
+    label: 'Телефон',
+    fieldName: 'phone'
+  },
+  {
+    label: 'Пароль',
+    fieldName: 'password'
+  },
+  {
+    label: 'Пароль (ещё раз)',
+    fieldName: 'password'
+  },
 ];
 
 export const signInTemplateProps = {
-  login: 'Логин',
-  password: 'Пароль',
-  submitButtonLabel: 'Авторизоваться',
-  signUpButtonLabel: 'Нет аккаунта?',
+  fields: [
+    {
+      label: 'Логин',
+      fieldName: 'login'
+    },
+    {
+      label: 'Пароль',
+      fieldName: 'password',
+    },
+  ],
+  submitButtonLabel: 'Войти',
+  signButton: {
+    label: 'Нет аккаунта?',
+    link: '/signUp'
+  },
 };
 
 export const signUpTemplateProps = {
   fields: signUpFields,
   submitButtonLabel: 'Зарегистрироваться',
-  signInButtonLabel: 'Войти',
+  signButton: {
+    label: 'Войти',
+    link: '/auth'
+  },
 };
 
 export const homeTemplateProps = {
@@ -61,3 +96,60 @@ export const profileTemplateProps = {
   editPass: 'Изменить пароль',
   logOut: 'Выйти',
 };
+
+export const editProfileTemplateProps = {
+  fields: [
+    {
+      label: 'Имя',
+      fieldName: 'first_name',
+      data: 'Марина',
+    },
+    {
+      label: 'Фамилия',
+      fieldName: 'second_name',
+      data: 'Фамильная',
+    },
+    {
+      label: 'Имя в чате',
+      fieldName: 'display_name',
+      data: 'mArInChIk',
+    },
+    {
+      label: 'Логин',
+      fieldName: 'login',
+      data: 'marina_name',
+    },
+    {
+      label: 'Почта',
+      fieldName: 'email',
+      data: 'pochta@yandex.ru',
+    },
+    {
+      label: 'Телефон',
+      fieldName: 'phone',
+      data: '+7 (999) 999 99 99',
+    },
+  ],
+  submitButton: 'Сохранить',
+  cancelButton: 'Отмена',
+};
+
+export const editPassTemplateProps = {
+  fields: [
+    {
+      label: 'Старый пароль',
+      fieldName: 'oldPassword',
+    },
+    {
+      label: 'Новый пароль',
+      fieldName: 'newPassword'
+    },
+    {
+      label: 'Повторите новый пароль',
+      fieldName: 'newPassword'
+    },
+  ],
+  submitButton: 'Сохранить',
+  cancelButton: 'Отмена',
+};
+// oldPassword, newPassword

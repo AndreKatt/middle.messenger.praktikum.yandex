@@ -1,6 +1,8 @@
 import Handlebars from "handlebars";
 
 import { 
+  editPassTemplateProps,
+  editProfileTemplateProps,
   homeTemplateProps, 
   profileTemplateProps, 
   signInTemplateProps, 
@@ -11,6 +13,8 @@ import { Button } from './shared/button';
 import { ProfileInfoItem } from './shared/profile-info-item';
 import { Error } from './entities/error';
 import { MessagePreview } from './entities/message-preview';
+import { EditForm } from "./entities/edit-form";
+import { AuthForm } from "./entities/auth-form";
 import * as Pages from './pages';
 
 // потом используются на страничках через {{> Field id='' ...props}}
@@ -21,6 +25,8 @@ Handlebars.registerPartial('Button', Button);
 Handlebars.registerPartial('ProfileInfoItem', ProfileInfoItem);
 Handlebars.registerPartial('Error', Error);
 Handlebars.registerPartial('MessagePreview', MessagePreview);
+Handlebars.registerPartial('EditForm', EditForm);
+Handlebars.registerPartial('AuthForm', AuthForm);
 
 export default class App {
   protected state: TState;
@@ -65,6 +71,20 @@ export default class App {
       }
     }
 
+    if (this.state.currentPage === '/edit') {
+      template = Handlebars.compile(Pages.EditProfilePage);
+      if (this.appElement) {
+        this.appElement.innerHTML = template(editProfileTemplateProps);
+      }
+    }
+
+    if (this.state.currentPage === '/editPassword') {
+      template = Handlebars.compile(Pages.EditPasswordPage);
+      if (this.appElement) {
+        this.appElement.innerHTML = template(editPassTemplateProps);
+      }
+    }
+
     if (this.state.currentPage === '/404') {
       template = Handlebars.compile(Pages.NotFoundPage);
       if (this.appElement) this.appElement.innerHTML = template({});
@@ -102,5 +122,7 @@ type TState = {
     | '/profile' 
     | '/404' 
     | '/error'
-    | '/home';
+    | '/home'
+    | '/edit'
+    | '/editPassword';
 };

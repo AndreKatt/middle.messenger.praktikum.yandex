@@ -1,7 +1,16 @@
+import './styles.pcss';
+
 export const Error = `
-  <div>
-    <h1>{{errorCode}}</h1>
-    <h3>{{description}}</h3>
-    <a href='/home'>Назад к чатам</a>
+  <div class='errorWrapper'>
+    <div class='errorContainer'>
+      <h1 class='errorTitle'>{{errorCode}}</h1>
+      <p class='errorDescription'>{{description}}</p>
+      <a 
+        href='/home'
+        class='errorLink'
+      >
+        Назад к чатам
+      </a>
+    </div>
   </div>
 `;

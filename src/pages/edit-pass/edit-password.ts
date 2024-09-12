@@ -1,5 +1,5 @@
 export const EditPasswordPage = `
-  <div class='profilePageWrapper'>
+  <div class="profilePageWrapper">
     {{> EditForm }}
   </div>
 `;

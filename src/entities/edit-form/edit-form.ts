@@ -1,9 +1,9 @@
-import './styles.pcss';
+import "./styles.pcss";
 
 export const EditForm = `
-  <div class='editFormContainer'>
+  <div class="editFormContainer">
     {{#if title}}
-      <h1 class='editFormtitle'>{{title}}</h1>
+      <h1 class="editFormtitle">{{title}}</h1>
     {{/if}}
     {{#each fields}}
       {{> ProfileInfoItem label=this.label data=this.data }}
@@ -11,12 +11,12 @@ export const EditForm = `
     
     <a href="/profile">{{> Button 
       label=submitButton
-      className='submitButton'
+      className="submitButton"
     }}</a>
 
     <a href="/profile">{{> Button 
       label=cancelButton
-      className='cancelButton'
+      className="cancelButton"
     }}</a>
   </div>
 `;

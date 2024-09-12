@@ -1,8 +1,8 @@
-import './styles.pcss';
+import "./styles.pcss";
 
 export const ProfileInfoItem = `
-  <div class='profileInfoItemContainer'>
+  <div class="profileInfoItemContainer">
     <p>{{label}}</p>
-    <p class='itemText'>{{data}}</p>
+    <p class="itemText">{{data}}</p>
   </div>
 `;

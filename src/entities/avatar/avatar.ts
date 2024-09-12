@@ -1,4 +1,4 @@
-import './styles.pcss';
+import "./styles.pcss";
 
 export const Avatar = `
   <div class={{className}}>

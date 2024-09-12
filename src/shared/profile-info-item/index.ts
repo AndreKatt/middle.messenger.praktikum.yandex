@@ -1,1 +1,1 @@
-export { ProfileInfoItem } from './profile-info-item';
+export { ProfileInfoItem } from "./profile-info-item";

@@ -1,35 +1,35 @@
-import './styles.pcss';
+import "./styles.pcss";
 
 export const AuthForm = `
-  <div class='formWrapper'>
-    <div class='formContainer'>
-      <div class='contentContainer'>
+  <div class="formWrapper">
+    <div class="formContainer">
+      <div class="contentContainer">
         {{#if title}}
-          <h1 class='title'>{{title}}</h1>
+          <h1 class="title">{{title}}</h1>
         {{/if}}
     
         {{#each fields}}
           {{> Input 
             label=this.label 
             name=this.fieldName
-            containerClassName='fieldContainer'
-            labelClassName='fieldLabel'
-            inputClassName='fieldInput'
+            containerClassName="fieldContainer"
+            labelClassName="fieldLabel"
+            inputClassName="fieldInput"
           }}
         {{/each}}
       </div>
       
-      <div class='authFooterContainer'>
+      <div class="authFooterContainer">
         <a href="/profile">
           {{> Button 
             label=submitButtonLabel
-            className='submitButton'
+            className="submitButton"
           }}
         </a>
         <a href={{signButton.link}}>
           {{> Button 
             label=signButton.label
-            className='signButton'
+            className="signButton"
           }}
         </a>
       </div>

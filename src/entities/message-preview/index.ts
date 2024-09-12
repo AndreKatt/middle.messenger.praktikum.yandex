@@ -1,1 +1,1 @@
-export { MessagePreview } from './message-preview';
+export { MessagePreview } from "./message-preview";

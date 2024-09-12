@@ -1,1 +1,1 @@
-export { EditForm } from './edit-form';
+export { EditForm } from "./edit-form";

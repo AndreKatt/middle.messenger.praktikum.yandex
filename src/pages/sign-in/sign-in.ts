@@ -1,3 +1,3 @@
 export const SignInPage = `
-  {{> AuthForm title='Вход'}}
+  {{> AuthForm title="Вход"}}
 `;

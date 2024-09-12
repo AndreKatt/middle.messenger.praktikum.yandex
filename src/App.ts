@@ -15,6 +15,7 @@ import { Error } from './entities/error';
 import { MessagePreview } from './entities/message-preview';
 import { EditForm } from "./entities/edit-form";
 import { AuthForm } from "./entities/auth-form";
+import { Avatar } from "./entities/avatar";
 import * as Pages from './pages';
 
 // потом используются на страничках через {{> Field id='' ...props}}
@@ -27,6 +28,7 @@ Handlebars.registerPartial('Error', Error);
 Handlebars.registerPartial('MessagePreview', MessagePreview);
 Handlebars.registerPartial('EditForm', EditForm);
 Handlebars.registerPartial('AuthForm', AuthForm);
+Handlebars.registerPartial('Avatar', Avatar);
 
 export default class App {
   protected state: TState;

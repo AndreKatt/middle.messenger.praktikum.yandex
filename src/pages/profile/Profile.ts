@@ -3,7 +3,13 @@ import './styles.pcss';
 export const ProfilePage = `
   <div class='profileInfoWrapper'>
     <div class='profileInfoContainer'>
-      <h1 class='title'>{{name}}</h1>
+      {{#if imageSrc}}
+        {{> Avatar imageSrc=imageSrc className="avatarWrapper" }}
+      {{else}}
+        {{> Avatar imageSrc="src/assets/PictureFill.svg" className="avatarWrapper" }}
+      {{/if}}
+
+      <h1 class='userName'>{{name}}</h1>
 
       {{#each infoItems}}
         {{> ProfileInfoItem label=this.label data=this.data }}

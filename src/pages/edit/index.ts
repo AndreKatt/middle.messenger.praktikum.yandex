@@ -1,1 +1,1 @@
-export { EditProfilePage } from "./edit";
+export { EditProfilePage } from "./Edit";

@@ -107,5 +107,6 @@ type TState = {
     | "/error"
     | "/home"
     | "/edit"
-    | "/editPassword";
+    | "/editPassword"
+    | "/";
 };

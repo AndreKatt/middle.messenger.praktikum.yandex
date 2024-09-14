@@ -1,3 +1,5 @@
+import PictureFillIcon from "./assets/PictureFill.svg";
+
 const profileInfoItems = [
   {
     data: "pochta@yandex.ru",
@@ -95,6 +97,7 @@ export const profileTemplateProps = {
   editData: "Изменить данные",
   editPass: "Изменить пароль",
   logOut: "Выйти",
+  iconSrc: PictureFillIcon,
 };
 
 export const editProfileTemplateProps = {
@@ -136,6 +139,7 @@ export const editProfileTemplateProps = {
       type: "text",
     },
   ],
+  iconSrc: PictureFillIcon,
   submitButton: "Сохранить",
   cancelButton: "Отмена",
 };
@@ -158,6 +162,7 @@ export const editPassTemplateProps = {
       type: "password",
     },
   ],
+  iconSrc: PictureFillIcon,
   submitButton: "Сохранить",
   cancelButton: "Отмена",
 };

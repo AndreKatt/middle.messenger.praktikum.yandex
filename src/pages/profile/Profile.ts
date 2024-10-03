@@ -11,7 +11,7 @@ export class ProfilePage extends Block {
     super({
       userName: profileInfoItems[2].data,
       UserAvatar: new UserAvatar({
-        className: "avatarWrapper",
+        className: "avatar-wrapper",
         iconSrc: PictureFillIcon,
       }),
       ProfileInfoItems: profileInfoItems.map(item => 
@@ -20,17 +20,17 @@ export class ProfilePage extends Block {
       EditProfileButton: new Button({
         id: "btnToEdit",
         label: "Изменить данные",
-        className: "editButton",
+        className: "edit-button",
       }),
       EditPassButton: new Button({
         id: "btnToEditPass",
         label: "Изменить пароль",
-        className: "editButton",
+        className: "edit-button",
       }),
       LogOutButton: new Button({
         id: "btnToAuth",
         label: "Выйти",
-        className: "logoutButton",
+        className: "logout-button",
       }),
     })
   }
@@ -38,24 +38,24 @@ export class ProfilePage extends Block {
   override render() {
       return `
         <main>
-          <div class="profileInfoWrapper">
-            <div class="profileInfoContainer">
+          <div class="profile-info-wrapper">
+            <div class="profile-info-container">
                 {{{ UserAvatar }}}
-                <h1 class="userName">{{userName}}</h1>
+                <h1 class="user-name">{{userName}}</h1>
   
                 {{{ ProfileInfoItems }}}
   
-              <div class="footerContainer">
-                <div class="editButtonWrapper">
+              <div class="footer-container">
+                <div class="edit-button-wrapper">
                   {{{ EditProfileButton }}}
                 </div>
-                <div class="editButtonWrapper">
+                <div class="edit-button-wrapper">
                   {{{ EditPassButton }}}
                 </div>
                 {{{ LogOutButton }}}
               </div>
   
-              <a href="/home" class="navLink">Назад</a>
+              <a href="/home" class="nav-link">Назад</a>
             </div>
           </div>
         </main>

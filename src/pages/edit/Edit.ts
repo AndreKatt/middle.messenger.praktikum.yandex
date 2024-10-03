@@ -19,7 +19,7 @@ export class EditProfilePage extends Block {
   override render() {
     return `
       <main>
-        <div class="profilePageWrapper">
+        <div class="profile-page-wrapper">
           {{{ EditForm  }}}
         </div>
       </main>

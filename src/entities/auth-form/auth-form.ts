@@ -20,33 +20,32 @@ export class AuthForm extends Block {
   constructor(props: TAuthFormProps) {
     super({ 
       ...props,
-      // maps
       AuthFields: props.AuthFields.map(field => 
         new Input({ 
           ...field,
-          containerClassName: "fieldContainer",
-          labelClassName: "fieldLabel",
-          inputClassName: "fieldInput",
+          containerClassName: "field-container",
+          labelClassName: "field-label",
+          inputClassName: "field-input",
         })
       ),
       SubmitButton: new Button({
         id: "btnToProfile",
         label: props.submitButtonLabel,
-        className: "authSubmitButton",
+        className: "auth-submit-button",
       }),
       SignButton: new Button({
         id: props.SignButton.id,
         label: props.SignButton.label,
-        className: "signButton",
+        className: "sign-button",
       })
     });
   }
 
   override render() {
     return `
-      <div class="authFormWrapper">
-        <div class="authFormContainer">
-          <div class="contentContainer">
+      <div class="auth-form-wrapper">
+        <div class="auth-form-container">
+          <div class="content-container">
             {{#if title}}
               <h1 class="title">{{title}}</h1>
             {{/if}}
@@ -56,7 +55,7 @@ export class AuthForm extends Block {
             </form>
           </div>
           
-          <div class="authFooterContainer">
+          <div class="auth-footer-container">
             {{{ SubmitButton }}}
             {{{ SignButton }}}
           </div>

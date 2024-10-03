@@ -22,7 +22,7 @@ export class EditForm extends Block {
     super({ 
       ...props,
       UserAvatar: new UserAvatar({
-        className: "editProfileAvatarWrapper",
+        className: "edit-profile-avatar-wrapper",
         iconSrc: props.avatarIconSrc,
         imageSrc: props.avatarImageSrc,
       }),
@@ -32,19 +32,19 @@ export class EditForm extends Block {
       SubmitButton: new Button({
         id: "btnToProfile",
         label: props.submitButtonLabel,
-        className: "submitButton",
+        className: "submit-button",
       }),
       CancelButton: new Button({
         id: "btnToProfile",
         label: props.cancelButtonLabel,
-        className: "cancelButton",
+        className: "cancel-button",
       }),
     });
   }
 
   override render() {
     return `
-      <div class="editFormContainer">
+      <div class="edit-form-container">
         {{{ UserAvatar }}}
 
         <form>

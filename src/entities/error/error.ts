@@ -13,13 +13,13 @@ export class Error extends Block {
 
   override render() {
     return `
-      <div class="errorWrapper">
-        <div class="errorContainer">
-          <h1 class="errorTitle">{{errorCode}}</h1>
-          <p class="errorDescription">{{description}}</p>
+      <div class="error-wrapper">
+        <div class="error-container">
+          <h1 class="error-title">{{errorCode}}</h1>
+          <p class="error-description">{{description}}</p>
           <a 
             href="/profile"
-            class="errorLink"
+            class="error-link"
           >
             Назад в профиль
           </a>

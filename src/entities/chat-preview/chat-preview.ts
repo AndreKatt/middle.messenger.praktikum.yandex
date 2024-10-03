@@ -16,7 +16,7 @@ export class ChatPreview extends Block {
     super({ 
       ...props,
       UserAvatar: new UserAvatar({
-        className: "chatPreviewAvatar",
+        className: "chat-preview-avatar",
         iconSrc: props.avatarIconSrc,
         imageSrc: props.avatarImageSrc,
       })
@@ -25,26 +25,26 @@ export class ChatPreview extends Block {
 
   override render() {
     return `
-      <div class="chatPreviewContainer">
-        <div class="chatPreviewAvatarWrapper">
+      <div class="chat-preview-container">
+        <div class="chat-preview-avatar-wrapper">
           {{{ UserAvatar }}}
         </div>
 
         <div>
-          <p class="chatPreviewUserName">
+          <p class="chat-preview-user-name">
             {{userName}}
           </p>
-          <p class="chatPreviewMessageText">
+          <p class="chat-preview-message-text">
             {{message}}
           </p>
         </div>
 
-        <div class="chatPreviewInfoContainer">
-          <p class="chatPreviewTimeInfo">
+        <div class="hat-preview-info-container">
+          <p class="chat-preview-time-info">
             {{time}}
           </p>
           {{#if newMessagesCount}}
-            <p class="newMessagesInfo">
+            <p class="new-messages-info">
               {{newMessagesCount}}
             </p>
           {{/if}}

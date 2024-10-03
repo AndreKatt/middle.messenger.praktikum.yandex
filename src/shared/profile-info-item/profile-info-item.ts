@@ -13,9 +13,9 @@ export class ProfileInfoItem extends Block {
 
   override render() {
     return `
-      <div class="profileInfoItemContainer">
+      <div class="profile-info-item-container">
         <p>{{label}}</p>
-        <p class="itemText">{{data}}</p>
+        <p class="item-text">{{data}}</p>
       </div>
     `;
   }

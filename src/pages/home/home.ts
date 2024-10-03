@@ -15,23 +15,23 @@ export class HomePage extends Block {
       ButtonToProfile: new Button({
         label: "Профиль",
         id: "btnToProfile",
-        className: "chatsButtonToProfile",
+        className: "chats-button-to-profile",
         buttonIconSrc: ArrowRightIcon,
       }),
       Chats: chats.map(chat =>  new ChatPreview({ ...chat })),
       UserAvatar: new UserAvatar({
-        className: "chatAvatar",
+        className: "chat-avatar",
         iconSrc: PictureFillIcon,
       }),
       AttachButton: new Button({
         buttonIconSrc: AttachIcon,
         alt: "Прикрепить",
-        className: "chatMessageAttachButton",
+        className: "chat-message-attach-button",
       }),
       SendButton: new Button({
         buttonIconSrc: ArrowRightPrimaryIcon,
         alt: "Отправить",
-        className: "chatMessageSendButton",
+        className: "chat-message-send-button",
       }),
     });
   }
@@ -39,37 +39,37 @@ export class HomePage extends Block {
   override render() {
     return `
       <main>
-        <div class="homePageContainer">
-          <div class="chatsContainer">
-            <div class="chatsHeader">
+        <div class="home-page-container">
+          <div class="chats-container">
+            <div class="chats-header">
               {{{ ButtonToProfile }}}
 
               <input 
                 type="search" 
                 placeholder="Поиск" 
-                class="chatsSearchInput"
+                class="chats-search-input"
               />
             </div>
 
             {{{ Chats }}}
           </div>
 
-          <div class="chatContainer">
-            <div class="chatUserInfoContainer">
-              <div class="chatAvatarWrapper">
+          <div class="chat-container">
+            <div class="chat-user-info-container">
+              <div class="chat-avatar-wrapper">
                 {{{ UserAvatar }}}
               </div>
-              <p class="chatPreviewUserName">
+              <p class="chat-preview-user-name">
                 Андрей
               </p>
             </div>
 
             <div></div>
 
-            <div class="chatMessageInputWrapper">
+            <div class="chat-message-input-wrapper">
               {{{ AttachButton }}}
               <input 
-                class="chatMessageInput"
+                class="chat-message-input"
                 placeholder="Сообщение"
               />
               {{{ SendButton }}}

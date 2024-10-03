@@ -70,15 +70,15 @@ export default class Block {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): void {
-    const response = this.componentDidUpdate(oldProps, newProps);
+  private _componentDidUpdate(/*oldProps: BlockProps, newProps: BlockProps*/): void {
+    const response = this.componentDidUpdate(/*oldProps, newProps*/);
     if (!response) {
       return;
     }
     this._render();
   }
 
-  protected componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): boolean {
+  protected componentDidUpdate(/*oldProps: BlockProps, newProps: BlockProps*/): boolean {
     return true;
   }
 

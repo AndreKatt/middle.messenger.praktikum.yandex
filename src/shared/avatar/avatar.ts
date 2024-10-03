@@ -14,7 +14,7 @@ export class Avatar extends Block {
   override render() {
     return `
       <div class={{className}}>
-        <div class="avatarContainer">
+        <div class="avatar-container">
           <img src={{imageSrc}} alt="аватарка" />
         </div>
       </div>

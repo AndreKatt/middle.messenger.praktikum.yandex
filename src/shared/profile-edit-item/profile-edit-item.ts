@@ -18,10 +18,10 @@ export class ProfileEditItem extends Block {
 
   override render() {
     return `
-      <div class="profileEditItemContainer">
+      <div class="profile-edit-item-container">
         <label>{{label}}</label>
         <input 
-          class="editProfileInput" 
+          class="edit-profile-input" 
           type={{type}}
           name={{fieldName}}
           value={{value}}

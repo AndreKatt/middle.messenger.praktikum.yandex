@@ -1,9 +1,28 @@
+import { EditForm } from "../../entities/edit-form";
+import Block from "../../framework/Block";
+import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
+import { editProfileFields } from "../../assets";
 
-export const EditProfilePage = `
-  <main>
-    <div class="profilePageWrapper">
-      {{> EditForm title="Редактировать профиль" }}
-    </div>
-  </main>
-`;
+export class EditProfilePage extends Block {
+  constructor() {
+    super({
+      EditForm: new EditForm({
+        avatarIconSrc: PictureFillIcon,
+        submitButtonLabel: "Сохранить",
+        cancelButtonLabel: "Отмена",
+        ProfileEditItems: editProfileFields,
+      }),
+    });
+  }
+
+  override render() {
+    return `
+      <main>
+        <div class="profilePageWrapper">
+          {{{ EditForm  }}}
+        </div>
+      </main>
+    `;
+  }
+};

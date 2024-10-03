@@ -1,35 +1,13 @@
-import Handlebars from "handlebars";
-
 import { 
-  editPassTemplateProps,
-  editProfileTemplateProps,
-  homeTemplateProps, 
-  profileTemplateProps, 
-  signInTemplateProps, 
-  signUpTemplateProps 
-} from "./assets";
-import { Input } from "./shared/input";
-import { Button } from "./shared/button";
-import { ProfileInfoItem } from "./shared/profile-info-item";
-import { ProfileEditItem } from "./shared/profile-edit-item";
-import { Error } from "./entities/error";
-import { MessagePreview } from "./entities/message-preview";
-import { EditForm } from "./entities/edit-form";
-import { AuthForm } from "./entities/auth-form";
-import { Avatar } from "./shared/avatar";
-import { UserAvatar } from "./entities/user-avatar";
-import * as Pages from "./pages";
-
-Handlebars.registerPartial("Input", Input);
-Handlebars.registerPartial("Button", Button);
-Handlebars.registerPartial("ProfileInfoItem", ProfileInfoItem);
-Handlebars.registerPartial("ProfileEditItem", ProfileEditItem);
-Handlebars.registerPartial("Error", Error);
-Handlebars.registerPartial("MessagePreview", MessagePreview);
-Handlebars.registerPartial("EditForm", EditForm);
-Handlebars.registerPartial("AuthForm", AuthForm);
-Handlebars.registerPartial("Avatar", Avatar);
-Handlebars.registerPartial("UserAvatar", UserAvatar);
+  EditPasswordPage,
+  EditProfilePage,
+  HomePage,
+  NotFoundPage, 
+  ProfilePage, 
+  ServerErrorPage, 
+  SignInPage, 
+  SignUpPage
+} from "./pages";
 
 export default class App {
   protected state: TState;
@@ -44,61 +22,59 @@ export default class App {
   }
 
   render() {
-    let template: any;
-
     if (this.state.currentPage === "/auth") {
-      template = Handlebars.compile(Pages.SignInPage);
+      const page = new SignInPage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(signInTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/signUp") {
-      template = Handlebars.compile(Pages.SignUpPage);
+      const page = new SignUpPage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(signUpTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/home") {
-      template = Handlebars.compile(Pages.HomePage);
+      const page = new HomePage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(homeTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/profile") {
-      template = Handlebars.compile(Pages.ProfilePage);
+      const page = new ProfilePage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(profileTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/edit") {
-      template = Handlebars.compile(Pages.EditProfilePage);
+      const page = new EditProfilePage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(editProfileTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/editPassword") {
-      template = Handlebars.compile(Pages.EditPasswordPage);
+      const page = new EditPasswordPage();
       if (this.appElement) {
-        this.appElement.innerHTML = template(editPassTemplateProps);
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/404") {
-      template = Handlebars.compile(Pages.NotFoundPage);
+      const page = new NotFoundPage();
       if (this.appElement) {
-        this.appElement.innerHTML = template({})
+        this.appElement.replaceChildren(page.getContent());
       }
     }
 
     if (this.state.currentPage === "/error") {
-      template = Handlebars.compile(Pages.ServerErrorPage);
+      const page = new ServerErrorPage();
       if (this.appElement) {
-        this.appElement.innerHTML = template({})
+        this.appElement.replaceChildren(page.getContent());
       }
     }
     this.attachEventListeners();
@@ -110,7 +86,9 @@ export default class App {
       el.addEventListener("click", (e) => {
         const link = e.target as HTMLLinkElement;
         e.preventDefault();
-        link.dataset.page && this.changePage(link.dataset.page as TState["currentPage"]);
+        if (link.dataset.page) {
+          this.changePage(link.dataset.page as TState["currentPage"]);
+        }
       })
     })
 

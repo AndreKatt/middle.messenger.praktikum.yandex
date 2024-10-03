@@ -1,0 +1,63 @@
+:root {
+  width: 100%;
+	height: 100%;
+
+  --color-primary: #3369F3;
+  --color-secondary: #999999;
+}
+
+body {
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 13px;
+}
+
+html, body, div, span, h1, h2, h3, 
+h4, h5, h6, p, a, ol, ul, li, form, label {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+
+main, footer {
+  width: 100%;
+  display: inherit;
+  flex-direction: inherit;
+  justify-content: inherit;
+  align-items: inherit;
+}
+
+h1 {
+  font-weight: 500;
+}
+
+form {
+  width: 100%;
+}
+
+input {
+  border: none;
+}
+
+a.text:active, a.text:hover, a {
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+}
+
+button {
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 13px;
+  color: white;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 8px;
+}
+
+button:hover {
+  cursor: pointer;
+}

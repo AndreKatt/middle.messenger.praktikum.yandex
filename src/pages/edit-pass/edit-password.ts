@@ -11,6 +11,7 @@ export class EditPasswordPage extends Block {
         submitButtonLabel: "Сохранить",
         cancelButtonLabel: "Отмена",
         ProfileEditItems: editPassFields,
+        formId: "formEditPassword",
       }),
     });
   }

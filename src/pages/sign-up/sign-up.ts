@@ -10,6 +10,7 @@ export class SignUpPage extends Block {
     super({
       AuthForm: new AuthForm({
         title: "Регистрация",
+        formId: "signUpForm",
         AuthFields: signUpFields,
         submitButtonLabel: "Зарегистрироваться",
         SignButton: {

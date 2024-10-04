@@ -21,7 +21,20 @@ export default class App {
     this.appElement = document.getElementById("app");
   }
 
-  protected render() {
+  protected attachEventListeners() {
+    const links = document.querySelectorAll(".link");
+    links.forEach(el => {
+      el.addEventListener("click", (e) => {
+        const link = e.target as HTMLLinkElement;
+        e.preventDefault();
+        if (link.dataset.page) {
+          this.ChangePage(link.dataset.page as TState["currentPage"]);
+        }
+      })
+    })
+  }
+
+  public Render() {
     if (this.state.currentPage === "/auth") {
       const page = new SignInPage();
       if (this.appElement) {
@@ -80,22 +93,9 @@ export default class App {
     this.attachEventListeners();
   }
 
-  protected attachEventListeners() {
-    const links = document.querySelectorAll(".link");
-    links.forEach(el => {
-      el.addEventListener("click", (e) => {
-        const link = e.target as HTMLLinkElement;
-        e.preventDefault();
-        if (link.dataset.page) {
-          this.ChangePage(link.dataset.page as TState["currentPage"]);
-        }
-      })
-    })
-  }
-
   public ChangePage(page: TState["currentPage"]) {
     this.state.currentPage = page;
-    this.render();
+    this.Render();
   }
 };
 

@@ -37,11 +37,17 @@ export class HomePage extends Block {
         buttonIconSrc: ArrowRightPrimaryIcon,
         alt: "Отправить",
         className: "chat-message-send-button",
+        onClick: () => {
+          const form = document.getElementById("messageForm") as HTMLFormElement;
+          const formData = new FormData(form);
+          console.log(`message: ${formData.get("message")}`);
+        },
       }),
       Messages: selectedChat.map(message => 
         new MessageItem({...message})
       ),
       checkedIconSrc: CheckedIcon,
+      formId: "messageForm",
     });
   }
 
@@ -82,11 +88,13 @@ export class HomePage extends Block {
 
             <div class="chat-message-input-wrapper">
               {{{ AttachButton }}}
-              <input 
-                class="chat-message-input"
-                placeholder="Сообщение"
-                name="message"
-              />
+              <form id={{formId}}>
+                <input 
+                  class="chat-message-input"
+                  placeholder="Сообщение"
+                  name="message"
+                />
+              </form>
               {{{ SendButton }}}
             </div>
           </div>

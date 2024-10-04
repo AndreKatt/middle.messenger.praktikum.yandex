@@ -10,6 +10,7 @@ export class SignInPage extends Block {
     super({
       AuthForm: new AuthForm({
         title: "Вход",
+        formId: "signInForm",
         AuthFields: signInFields,
         submitButtonLabel: "Войти",
         SignButton: {

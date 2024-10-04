@@ -12,6 +12,7 @@ export class EditProfilePage extends Block {
         submitButtonLabel: "Сохранить",
         cancelButtonLabel: "Отмена",
         ProfileEditItems: editProfileFields,
+        formId: "formEditProfile",
       }),
     });
   }

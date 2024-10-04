@@ -16,6 +16,7 @@ type TEditFormProps = {
   }[]
   submitButtonLabel: string;
   cancelButtonLabel: string;
+  formId: string;
 }
 
 export class EditForm extends Block {
@@ -35,14 +36,20 @@ export class EditForm extends Block {
       SubmitButton: new Button({
         label: props.submitButtonLabel,
         className: "submit-button",
-        onClick: () => this.appService.ChangePage("/profile"),
+        onClick: () => {
+          const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
+          const formData = new FormData(form);
+          props.ProfileEditItems.forEach(field => {
+            console.log(`${field.label}: ${formData.get(field.fieldName)}`)
+          });
+          this.appService.ChangePage("/profile");
+        },
 
       }),
       CancelButton: new Button({
         label: props.cancelButtonLabel,
         className: "cancel-button",
         onClick: () => this.appService.ChangePage("/profile"),
-
       }),
     });
   }
@@ -52,7 +59,7 @@ export class EditForm extends Block {
       <div class="edit-form-container">
         {{{ UserAvatar }}}
 
-        <form>
+        <form id={{formId}}>
           {{{ ProfileEditItems }}}
         </form>
         

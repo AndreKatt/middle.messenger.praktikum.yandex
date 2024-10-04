@@ -6,6 +6,7 @@ import "./styles.pcss";
 
 type TAuthFormProps = {
   title?: string;
+  formId: string;
   AuthFields: {
     label: string;
     inputName: string;
@@ -34,7 +35,14 @@ export class AuthForm extends Block {
       SubmitButton: new Button({
         label: props.submitButtonLabel,
         className: "auth-submit-button",
-        onClick: () => this.appService.ChangePage("/profile"),
+        onClick: () => {
+          const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
+          const formData = new FormData(form);
+          props.AuthFields.forEach(field => {
+            console.log(`${field.label}: ${formData.get(field.inputName)}`)
+          });
+          this.appService.ChangePage("/profile")
+        },
       }),
       SignButton: new Button({
         ...props.SignButton,
@@ -52,7 +60,7 @@ export class AuthForm extends Block {
               <h1 class="title">{{title}}</h1>
             {{/if}}
 
-            <form>
+            <form id={{formId}}>
             {{{ AuthFields }}}
             </form>
           </div>

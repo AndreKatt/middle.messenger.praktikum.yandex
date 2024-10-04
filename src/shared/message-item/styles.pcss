@@ -1,0 +1,38 @@
+.chat-user-message-container,
+.chat-current-user-message-container {
+  max-width: 380px;
+  min-width: 80px;
+  font-size: 12px;
+  line-height: 15px;
+  padding: 11px;
+  padding-bottom: 22px;
+  position: relative;
+}
+
+.chat-user-message-time,
+.chat-current-user-message-time {
+  position: absolute;
+  right: 11px;
+  bottom: 10px;
+  font-size: 9px;
+  line-height: 9px;
+}
+
+.chat-user-message-container {
+  background-color: #F8F8F8;
+  border-radius: 0 12px 12px;
+}
+
+.chat-user-message-time {
+  color: var( --color-secondary);
+}
+
+.chat-current-user-message-container {
+  background-color: var(--color-light-blue);
+  border-radius: 12px 12px 0;
+  align-self: end;
+}
+
+.chat-current-user-message-time {
+  color: var( --color-primary);
+}

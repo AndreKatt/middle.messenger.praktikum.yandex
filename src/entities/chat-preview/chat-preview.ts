@@ -39,7 +39,7 @@ export class ChatPreview extends Block {
           </p>
         </div>
 
-        <div class="hat-preview-info-container">
+        <div class="chat-preview-info-container">
           <p class="chat-preview-time-info">
             {{time}}
           </p>

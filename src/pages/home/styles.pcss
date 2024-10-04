@@ -7,7 +7,6 @@
   height: 100vh;
   background: #FBFBFB;
   border-right: 1px solid #EAEAEA;
-  padding: 0 10px;
 }
 
 .chats-header {
@@ -15,6 +14,7 @@
   flex-direction: column;
   align-items: end;
   border-bottom: 1px solid #EAEAEA;
+  padding: 0 10px;
 }
 
 .chats-button-to-profile {
@@ -79,6 +79,22 @@
     height: 15px;
     width: 15px;
   }
+}
+
+.chat-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 48px;
+}
+
+.chat-history-date {
+  width: 100%;
+  color: var( --color-secondary);
+  font-size: 12px;
+  line-height: 12px;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .chat-message-input-wrapper {

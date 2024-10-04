@@ -1,13 +1,15 @@
+import { chats, selectedChat } from "../../assets";
 import { Button } from "../../shared/button";
+import { UserAvatar } from "../../entities/user-avatar";
+import { ChatPreview } from "../../entities/chat-preview";
+import { MessageItem } from "../../shared/message-item";
 import Block from "../../framework/Block";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import AttachIcon from "../../assets/Attach.svg";
+import CheckedIcon from "../../assets/Checked.svg";
 import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
 import "./styles.pcss";
-import { UserAvatar } from "../../entities/user-avatar";
-import { ChatPreview } from "../../entities/chat-preview";
-import { chats } from "../../assets";
 
 export class HomePage extends Block {
   constructor() {
@@ -18,7 +20,7 @@ export class HomePage extends Block {
         className: "chats-button-to-profile",
         buttonIconSrc: ArrowRightIcon,
       }),
-      Chats: chats.map(chat =>  new ChatPreview({ ...chat })),
+      Chats: chats.map(chat => new ChatPreview({ ...chat })),
       UserAvatar: new UserAvatar({
         className: "chat-avatar",
         iconSrc: PictureFillIcon,
@@ -33,6 +35,10 @@ export class HomePage extends Block {
         alt: "Отправить",
         className: "chat-message-send-button",
       }),
+      Messages: selectedChat.map(message => 
+        new MessageItem({...message})
+      ),
+      checkedIconSrc: CheckedIcon,
     });
   }
 
@@ -64,13 +70,19 @@ export class HomePage extends Block {
               </p>
             </div>
 
-            <div></div>
+            <div class="chat-history-container">
+              <p class="chat-history-date">
+                19 сентября
+              </p>
+              {{{ Messages }}}
+            </div>
 
             <div class="chat-message-input-wrapper">
               {{{ AttachButton }}}
               <input 
                 class="chat-message-input"
                 placeholder="Сообщение"
+                name="message"
               />
               {{{ SendButton }}}
             </div>

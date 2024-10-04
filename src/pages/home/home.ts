@@ -4,7 +4,6 @@ import { MessageItem } from "../../shared/message-item";
 import { UserAvatar } from "../../entities/user-avatar";
 import { ChatPreview } from "../../entities/chat-preview";
 import Block from "../../framework/Block";
-import App from "../../App";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import AttachIcon from "../../assets/Attach.svg";
@@ -13,15 +12,13 @@ import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
 import "./styles.pcss";
 
 export class HomePage extends Block {
-  protected appService = new App();
-
   constructor() {
     super({
       ButtonToProfile: new Button({
         label: "Профиль",
         className: "chats-button-to-profile",
         buttonIconSrc: ArrowRightIcon,
-        onClick: () => this.appService.ChangePage("/profile"),
+        onClick: () => this.AppService.ChangePage("/profile"),
       }),
       Chats: chats.map(chat => new ChatPreview({ ...chat })),
       UserAvatar: new UserAvatar({

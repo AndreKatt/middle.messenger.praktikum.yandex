@@ -1,11 +1,8 @@
 import { signInFields } from "../../assets";
 import { AuthForm } from "../../entities/auth-form";
 import Block from "../../framework/Block";
-import App from "../../App";
 
 export class SignInPage extends Block {
-  protected appService = new App();
-
   constructor() {
     super({
       AuthForm: new AuthForm({
@@ -15,7 +12,7 @@ export class SignInPage extends Block {
         submitButtonLabel: "Войти",
         SignButton: {
           label: "Нет аккаунта?",
-          onClick: () => this.appService.ChangePage("/signUp"),
+          onClick: () => this.AppService.ChangePage("/signUp"),
         }
       })
     });

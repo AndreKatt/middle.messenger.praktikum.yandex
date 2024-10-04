@@ -1,3 +1,4 @@
+import App from '../App';
 import EventBus, { EventCallback } from './EventBus';
 import Handlebars from 'handlebars';
 
@@ -5,22 +6,20 @@ interface BlockProps {
   [key: string]: unknown;
 }
 
+enum Events {
+  INIT = 'init',
+  FLOW_CDM = 'flow:component-did-mount',
+  FLOW_CDU = 'flow:component-did-update',
+  FLOW_RENDER = 'flow:render',
+}
+
 export default class Block {
-  static EVENTS = {
-    INIT: 'init',
-    FLOW_CDM: 'flow:component-did-mount',
-    FLOW_CDU: 'flow:component-did-update',
-    FLOW_RENDER: 'flow:render',
-  };
+  public readonly AppService = new App();
 
   protected _element: HTMLElement | null = null;
-
   protected _id: number = Math.floor(100000 + Math.random() * 900000);
-
   protected props: BlockProps;
-
   protected children: Record<string, Block>;
-
   protected lists: Record<string, unknown[]>;
 
   protected eventBus: () => EventBus;
@@ -33,7 +32,7 @@ export default class Block {
     this.lists = lists;
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
-    eventBus.emit(Block.EVENTS.INIT);
+    eventBus.emit(Events.INIT);
   }
 
   private _addEvents(): void {
@@ -49,14 +48,26 @@ export default class Block {
   }
 
   private _registerEvents(eventBus: EventBus): void {
-    eventBus.on(Block.EVENTS.INIT, this.init.bind(this) as EventCallback);
-    eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this) as EventCallback);
-    eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this) as EventCallback);
-    eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this) as EventCallback);
+    eventBus.on(Events.INIT, this.init.bind(this) as EventCallback);
+    eventBus.on(Events.FLOW_CDM, this._componentDidMount.bind(this) as EventCallback);
+    eventBus.on(Events.FLOW_CDU, this._componentDidUpdate.bind(this) as EventCallback);
+    eventBus.on(Events.FLOW_RENDER, this._render.bind(this) as EventCallback);
+  }
+
+  public _removeEvents(): void {
+    const events = this.props.events as Record<string, EventListenerOrEventListenerObject>;
+
+    if (!events) return;
+
+    Object.keys(events).forEach(eventName => {
+      if (this._element) {
+        this._element.removeEventListener(eventName, events[eventName]);
+      }
+    });
   }
 
   protected init(): void {
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this.eventBus().emit(Events.FLOW_RENDER);
   }
 
   private _componentDidMount(): void {
@@ -67,7 +78,7 @@ export default class Block {
   protected componentDidMount(): void {}
 
   public dispatchComponentDidMount(): void {
-    this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+    this.eventBus().emit(Events.FLOW_CDM);
   }
 
   private _componentDidUpdate(/*oldProps: BlockProps, newProps: BlockProps*/): void {
@@ -186,7 +197,6 @@ export default class Block {
   }
 
   private _makePropsProxy(props: BlockProps): BlockProps {
-    // const self = this;
     const eventBusBinded = this.eventBus;
 
     return new Proxy(props, {
@@ -197,7 +207,7 @@ export default class Block {
       set(target: BlockProps, prop: string, value: unknown) {
         const oldTarget = { ...target };
         target[prop] = value;
-        eventBusBinded().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
+        eventBusBinded().emit(Events.FLOW_CDU, oldTarget, target);
         return true;
       },
       deleteProperty() {

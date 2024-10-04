@@ -2,7 +2,6 @@ import { UserAvatar } from "../user-avatar";
 import { Button } from "../../shared/button";
 import { ProfileEditItem } from "../../shared/profile-edit-item";
 import Block from "../../framework/Block";
-import App from "../../App";
 import "./styles.pcss";
 
 type TEditFormProps = {
@@ -20,8 +19,6 @@ type TEditFormProps = {
 }
 
 export class EditForm extends Block {
-  protected appService = new App();
-
   constructor(props: TEditFormProps) {
     super({ 
       ...props,
@@ -42,14 +39,14 @@ export class EditForm extends Block {
           props.ProfileEditItems.forEach(field => {
             console.log(`${field.label}: ${formData.get(field.fieldName)}`)
           });
-          this.appService.ChangePage("/profile");
+          this.AppService.ChangePage("/profile");
         },
 
       }),
       CancelButton: new Button({
         label: props.cancelButtonLabel,
         className: "cancel-button",
-        onClick: () => this.appService.ChangePage("/profile"),
+        onClick: () => this.AppService.ChangePage("/profile"),
       }),
     });
   }

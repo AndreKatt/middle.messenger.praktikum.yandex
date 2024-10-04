@@ -3,13 +3,10 @@ import { profileInfoItems } from "../../assets";
 import { ProfileInfoItem } from "../../shared/profile-info-item";
 import { Button } from "../../shared/button";
 import Block from "../../framework/Block";
-import App from "../../App";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
 
 export class ProfilePage extends Block {
-  protected appService = new App();
-
   constructor() {
     super({
       userName: profileInfoItems[2].data,
@@ -23,17 +20,17 @@ export class ProfilePage extends Block {
       EditProfileButton: new Button({
         label: "Изменить данные",
         className: "edit-button",
-        onClick: () => this.appService.ChangePage("/edit"),
+        onClick: () => this.AppService.ChangePage("/edit"),
       }),
       EditPassButton: new Button({
         label: "Изменить пароль",
         className: "edit-button",
-        onClick: () => this.appService.ChangePage("/editPassword"),
+        onClick: () => this.AppService.ChangePage("/editPassword"),
       }),
       LogOutButton: new Button({
         label: "Выйти",
         className: "logout-button",
-        onClick: () => this.appService.ChangePage("/auth"),
+        onClick: () => this.AppService.ChangePage("/auth"),
       }),
     })
   }

@@ -1,7 +1,6 @@
 import { Button } from "../../shared/button";
 import { Input } from "../../shared/input";
 import Block from "../../framework/Block";
-import App from "../../App";
 import "./styles.pcss";
 
 type TAuthFormProps = {
@@ -19,8 +18,6 @@ type TAuthFormProps = {
 }
 
 export class AuthForm extends Block {
-  protected appService = new App();
-
   constructor(props: TAuthFormProps) {
     super({ 
       ...props,
@@ -41,7 +38,7 @@ export class AuthForm extends Block {
           props.AuthFields.forEach(field => {
             console.log(`${field.label}: ${formData.get(field.inputName)}`)
           });
-          this.appService.ChangePage("/profile")
+          this.AppService.ChangePage("/profile")
         },
       }),
       SignButton: new Button({

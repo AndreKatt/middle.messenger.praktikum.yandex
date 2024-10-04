@@ -1,8 +1,8 @@
+import { editProfileFields } from "../../assets";
 import { EditForm } from "../../entities/edit-form";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
-import { editProfileFields } from "../../assets";
 
 export class EditProfilePage extends Block {
   constructor() {

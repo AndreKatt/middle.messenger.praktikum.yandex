@@ -1,5 +1,5 @@
-import Block from "../../framework/Block";
 import { UserAvatar } from "../user-avatar";
+import Block from "../../framework/Block";
 import "./styles.pcss";
 
 type TChatPreviewProps = {

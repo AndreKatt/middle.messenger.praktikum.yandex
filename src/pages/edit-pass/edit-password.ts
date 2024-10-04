@@ -1,7 +1,7 @@
 import { EditForm } from "../../entities/edit-form";
+import { editPassFields } from "../../assets";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
-import { editPassFields } from "../../assets";
 
 export class EditPasswordPage extends Block {
   constructor() {
@@ -18,7 +18,7 @@ export class EditPasswordPage extends Block {
   override render() {
     return `
       <main>
-        <div class="profilePageWrapper">
+        <div class="profile-page-wrapper">
           {{{ EditForm  }}}
         </div>
       </main>

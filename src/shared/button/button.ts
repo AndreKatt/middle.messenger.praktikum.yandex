@@ -1,7 +1,6 @@
 import Block from "../../framework/Block";
 
 type TButtonProps = {
-  id?: string;
   label?: string;
   buttonIconSrc?: string;
   alt?: string;
@@ -13,35 +12,23 @@ export class Button extends Block {
   constructor(props: TButtonProps) {
     super({ 
       ...props,
-      attr: {
-        id: props.id,
+      events: {
+        click: (e: Event) => props?.onClick?.(e)
       }
      });
   }
 
   override render() {
     return `
-      {{#if id}}
-        <button id={{id}} class={{className}}>
-          {{#if label}}
-            {{label}}
-          {{/if}}
-          
-          {{#if buttonIconSrc}}
-            <img src={{buttonIconSrc}} alt={{alt}} />
-          {{/if}}
-        </button>
-      {{else}}
-        <button class={{className}}>
-          {{#if label}}
-            {{label}}
-          {{/if}}
-          
-          {{#if buttonIconSrc}}
-            <img src={{buttonIconSrc}} alt={{alt}} />
-          {{/if}}
-        </button>
-      {{/if}}
+      <button class={{className}}>
+        {{#if label}}
+          {{label}}
+        {{/if}}
+        
+        {{#if buttonIconSrc}}
+          <img src={{buttonIconSrc}} alt={{alt}} />
+        {{/if}}
+      </button>
     `;
   }
 };

@@ -1,6 +1,7 @@
-import Block from "../../framework/Block";
 import { Button } from "../../shared/button";
 import { Input } from "../../shared/input";
+import Block from "../../framework/Block";
+import App from "../../App";
 import "./styles.pcss";
 
 type TAuthFormProps = {
@@ -11,12 +12,14 @@ type TAuthFormProps = {
   }[];
   submitButtonLabel: string;
   SignButton: {
-    id: string;
     label: string;
+    onClick: () => void;
   }
 }
 
 export class AuthForm extends Block {
+  protected appService = new App();
+
   constructor(props: TAuthFormProps) {
     super({ 
       ...props,
@@ -29,13 +32,12 @@ export class AuthForm extends Block {
         })
       ),
       SubmitButton: new Button({
-        id: "btnToProfile",
         label: props.submitButtonLabel,
         className: "auth-submit-button",
+        onClick: () => this.appService.ChangePage("/profile"),
       }),
       SignButton: new Button({
-        id: props.SignButton.id,
-        label: props.SignButton.label,
+        ...props.SignButton,
         className: "sign-button",
       })
     });

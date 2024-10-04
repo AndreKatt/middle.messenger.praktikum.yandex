@@ -21,7 +21,7 @@ export default class App {
     this.appElement = document.getElementById("app");
   }
 
-  render() {
+  protected render() {
     if (this.state.currentPage === "/auth") {
       const page = new SignInPage();
       if (this.appElement) {
@@ -80,60 +80,20 @@ export default class App {
     this.attachEventListeners();
   }
 
-  attachEventListeners() {
+  protected attachEventListeners() {
     const links = document.querySelectorAll(".link");
     links.forEach(el => {
       el.addEventListener("click", (e) => {
         const link = e.target as HTMLLinkElement;
         e.preventDefault();
         if (link.dataset.page) {
-          this.changePage(link.dataset.page as TState["currentPage"]);
+          this.ChangePage(link.dataset.page as TState["currentPage"]);
         }
-      })
-    })
-
-    const btnsToProfile = document.querySelectorAll("#btnToProfile");
-    btnsToProfile.forEach(el => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.changePage("/profile");
-      })
-    })
-
-    const btnsToEdit = document.querySelectorAll("#btnToEdit");
-    btnsToEdit.forEach(el => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.changePage("/edit");
-      })
-    })
-
-    const btnsToEditPass = document.querySelectorAll("#btnToEditPass");
-    btnsToEditPass.forEach(el => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.changePage("/editPassword");
-      })
-    })
-
-    const btnsToAuth = document.querySelectorAll("#btnToAuth");
-    btnsToAuth.forEach(el => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.changePage("/auth");
-      })
-    })
-
-    const btnsToSignUp = document.querySelectorAll("#btnToSignUp");
-    btnsToSignUp.forEach(el => {
-      el.addEventListener("click", (e) => {
-        e.preventDefault();
-        this.changePage("/signUp");
       })
     })
   }
 
-  changePage(page: TState["currentPage"]) {
+  public ChangePage(page: TState["currentPage"]) {
     this.state.currentPage = page;
     this.render();
   }

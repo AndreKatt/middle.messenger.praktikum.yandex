@@ -174,3 +174,38 @@ export const selectedChat = [
     isChecked: true,
   }
 ]
+
+export const menuLinkItems = [
+  {
+    url: "/auth",
+    title: "Войти",
+  },
+  {
+    url: "/signUp",
+    title: "Зарегистрироваться"
+  },
+  {
+    url: "/home",
+    title: "Чаты"
+  },
+  {
+    url: "/profile",
+    title: "Профиль"
+  },
+  {
+    url: "/edit",
+    title: "Изменить данные"
+  },
+  {
+    url: "/editPassword",
+    title: "Изменить пароль"
+  },
+  {
+    url: "/404",
+    title: "Not Found"
+  },
+  {
+    url: "/error",
+    title: "Server Error"
+  }
+];

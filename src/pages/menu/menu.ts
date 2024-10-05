@@ -1,17 +1,25 @@
+import { menuLinkItems } from '../../assets';
+import Block from '../../framework/Block';
+import { LinkItem } from './link-item';
 import './styles.pcss';
 
-export const MenuPage = `
-  <div class="menuContainer">
-    <h1>Меню</h1>
-    <ul class="menuList">
-      {{> LinkItem url="/auth" title="Войти"}}
-      {{> LinkItem url="/signUp" title="Зарегистрироваться"}}
-      {{> LinkItem url="/home" title="Чаты"}}
-      {{> LinkItem url="/profile" title="Профиль"}}
-      {{> LinkItem url="/edit" title="Изменить данные"}}
-      {{> LinkItem url="/editPassword" title="Изменить пароль"}}
-      {{> LinkItem url="/404" title="Not Found"}}
-      {{> LinkItem url="/error" title="Server Error"}}
-    </ul>
-  </div>
-`;
+export class MenuPage extends Block {
+  constructor() {
+    super({
+      LinkItems: menuLinkItems.map(link => 
+        new LinkItem(link)
+      ),
+    })
+  }
+
+  override render() {
+    return `
+      <div class="menuContainer">
+        <h1>Меню</h1>
+        <ul class="menuList">
+          {{{ LinkItems }}}
+        </ul>
+      </div>
+    `;
+  }
+};

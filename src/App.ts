@@ -2,6 +2,7 @@ import {
   EditPasswordPage,
   EditProfilePage,
   HomePage,
+  MenuPage,
   NotFoundPage, 
   ProfilePage, 
   ServerErrorPage, 
@@ -90,6 +91,14 @@ export default class App {
         this.appElement.replaceChildren(page.getContent());
       }
     }
+
+    if (this.state.currentPage === "/") {
+      const page = new MenuPage();
+      if (this.appElement) {
+        this.appElement.replaceChildren(page.getContent());
+      }
+    }
+    
     this.attachEventListeners();
   }
 

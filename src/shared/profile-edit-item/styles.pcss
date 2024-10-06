@@ -1,4 +1,4 @@
-.profileEditItemContainer {
+.profile-edit-item-container {
   width: 100%;
   height: 34px;
   display: flex;
@@ -8,13 +8,28 @@
   position: relative;
 }
 
-.editProfileInput {
+.edit-profile-input,
+.edit-profile-input-error  {
   position: absolute;
   right: 0;
   text-align: end;
+}
+
+.edit-profile-input {
   color: var(--color-secondary);
-  
+    
   &:active, &:focus {
     color: inherit;
   }
+}
+
+.edit-profile-input-error {
+  color: var(--color-error);
+}
+
+.edit-error-text {
+  font-size: 9px;
+  color: var(--color-error);
+  text-align: end;
+  padding: 10px 0;
 }

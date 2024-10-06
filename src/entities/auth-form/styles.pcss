@@ -1,4 +1,4 @@
-.authFormWrapper {
+.auth-form-wrapper {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.authFormContainer {
+.auth-form-container {
   position: relative;
   width: 340px;
   min-height: 460px;
@@ -14,11 +14,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0px 0px 6px 0px #00000024;
+  box-shadow: 0 0 6px 0 #00000024;
   border-radius: 12px;
 }
 
-.contentContainer {
+.content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,20 +29,25 @@
   margin: 43px 0;
 }
 
-.fieldContainer {
+.field-container {
   display: flex;
   flex-direction: column;
   margin-bottom: 18px;
 }
 
-.fieldLabel {
+.field-label {
   color: var(--color-secondary);
   font-size: 9px;
   font-weight: 500;
   line-height: 9px;
 }
 
-.fieldInput {
+.field-input-error {
+  color: var(--color-error);
+}
+
+.field-input,
+.field-input-error {
   height: 24px;
   width: 280px;
   border: none;
@@ -53,13 +58,13 @@
   }
 }
 
-.authFooterContainer {
+.auth-footer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.authSubmitButton {
+.auth-submit-button {
   width: 280px;
   height: 37px;
   border: none;
@@ -67,7 +72,7 @@
   margin-top: 43px;
 }
 
-.signButton {
+.sign-button {
   height: 37px;
   color: var(--color-primary);
   border: none;

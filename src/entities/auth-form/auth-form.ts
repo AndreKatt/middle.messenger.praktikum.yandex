@@ -1,38 +1,109 @@
+import { validate } from "../../utils/validate";
+import { Button } from "../../shared/button";
+import { Input } from "../../shared/input";
+import Block from "../../framework/Block";
 import "./styles.pcss";
 
-export const AuthForm = `
-  <div class="authFormWrapper">
-    <div class="authFormContainer">
-      <div class="contentContainer">
-        {{#if title}}
-          <h1 class="title">{{title}}</h1>
-        {{/if}}
+type TAuthFormProps = {
+  title?: string;
+  formId: string;
+  AuthFields: {
+    label: string;
+    inputName: string;
+    inputId: string;
+  }[];
+  submitButtonLabel: string;
+  SignButton: {
+    label: string;
+    onClick: () => void;
+  }
+}
 
-        <form>
-          {{#each fields}}
-            {{> Input 
-              label=this.label 
-              name=this.fieldName
-              containerClassName="fieldContainer"
-              labelClassName="fieldLabel"
-              inputClassName="fieldInput"
-            }}
-          {{/each}}
-        </form>
+export class AuthForm extends Block {
+  constructor(props: TAuthFormProps) {
+    super({ 
+      ...props,
+      AuthFields: props.AuthFields.map((field, idx) => 
+        new Input({ 
+          ...field,
+          containerClassName: "field-container",
+          labelClassName: "field-label",
+          inputClassName: "field-input",
+          onBlur: () => {
+            const input = document.getElementById(field.inputId) as HTMLInputElement;
+            const errMessage = validate(field.inputName, input.value as string, true);
+            const fieldEl = this.lists.AuthFields[idx] as Input;
+
+            if (errMessage) {
+              fieldEl.setProps({
+                error: errMessage,
+                inputClassName: "field-input-error",
+              });
+
+              return;
+            }
+            fieldEl.setProps({
+              error: undefined,
+              inputClassName: "field-input",
+            })
+          }
+        })
+      ),
+      SubmitButton: new Button({
+        label: props.submitButtonLabel,
+        className: "auth-submit-button",
+        onClick: () => {
+          let hasErrors = false;
+          const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
+          const formData = new FormData(form);
+
+          props.AuthFields.forEach((field, idx) => {
+            const fieldValue = formData.get(field.inputName);
+            const errMessage = validate(field.inputName, fieldValue as string, true);
+            if (errMessage) {
+              hasErrors = true;
+              const field = this.lists.AuthFields[idx] as Input;
+              field.setProps({
+                error: errMessage,
+                inputClassName: "field-input-error",
+              });
+              return;
+            }
+            console.log(`${field.inputName}: ${fieldValue}`);
+          });
+
+          if (hasErrors) return;
+
+          this.AppService.ChangePage("/profile")
+        },
+      }),
+      SignButton: new Button({
+        ...props.SignButton,
+        className: "sign-button",
+      })
+    });
+  }
+
+  override render() {
+    return `
+      <div class="auth-form-wrapper">
+        <div class="auth-form-container">
+          <div class="content-container">
+            {{#if title}}
+              <h1 class="title">{{title}}</h1>
+            {{/if}}
+
+            <form id={{formId}}>
+            {{{ AuthFields }}}
+            </form>
+          </div>
+          
+          <div class="auth-footer-container">
+            {{{ SubmitButton }}}
+            {{{ SignButton }}}
+          </div>
+        </div>
       </div>
-      
-      <div class="authFooterContainer">
-        {{> Button 
-          id="btnToProfile"
-          label=submitButtonLabel
-          className="authSubmitButton"
-        }}
-        {{> Button 
-          id=signButton.id
-          label=signButton.label
-          className="signButton"
-        }}
-      </div>
-    </div>
-  </div>
-`;
+    `;
+  }
+};

@@ -28,7 +28,6 @@ Netlify: https://deploy--messennger.netlify.app
 Зарегистрироваться: https://deploy--messennger.netlify.app/signUp
 
 Чаты: https://deploy--messennger.netlify.app/home
-(страница будет реализована в следующих спринтах)
 
 Профиль: https://deploy--messennger.netlify.app/profile
 

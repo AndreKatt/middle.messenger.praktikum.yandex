@@ -6,6 +6,10 @@ type TProfileEditItemProps = {
   value?: string;
   type: string;
   fieldName: string;
+  error?: string;
+  inputClassName: string;
+  inputId: string;
+  onBlur?: () => void;
 }
 
 export class ProfileEditItem extends Block {
@@ -13,21 +17,48 @@ export class ProfileEditItem extends Block {
     super({ 
       ...props,
       value: props.value || '',
+      EditItemField: new EditItemField({ ...props }),
     });
   }
 
   override render() {
     return `
-      <div class="profile-edit-item-container">
-        <label>{{label}}</label>
-        <input 
-          class="edit-profile-input" 
-          type={{type}}
-          name={{fieldName}}
-          value={{value}}
-        />
-        </p>
+      <div>
+        <div class="profile-edit-item-container">
+          <label>{{label}}</label>
+          {{{ EditItemField }}}
+          </div>
+          {{#if error}}
+            <p class="edit-error-text">
+              {{error}}
+            </p>
+          {{/if}}
       </div>
     `;
+  }
+};
+
+class EditItemField extends Block {
+  constructor(props: Partial<TProfileEditItemProps>) {
+    super({ 
+      ...props,
+      events: {
+        blur: () => {
+          props?.onBlur?.();
+        }
+      }
+    });
+  }
+
+  override render() {
+    return `
+      <input
+        id={{inputId}}
+        class={{inputClassName}}
+        type={{type}}
+        name={{fieldName}}
+        placeholder={{value}}
+      />
+    `
   }
 };

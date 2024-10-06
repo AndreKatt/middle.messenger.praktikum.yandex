@@ -140,7 +140,6 @@ export default class Block {
   }
 
   private _render(): void {
-    console.log('Render');
     const propsAndStubs = { ...this.props };
     const _tmpId =  Math.floor(100000 + Math.random() * 900000);
     Object.entries(this.children).forEach(([key, child]) => {
@@ -197,7 +196,7 @@ export default class Block {
   }
 
   private _makePropsProxy(props: BlockProps): BlockProps {
-    const eventBusBinded = this.eventBus;
+    const eventBusBinded = () => this.eventBus();
 
     return new Proxy(props, {
       get(target: BlockProps, prop: string) {

@@ -31,41 +31,50 @@ export const signUpFields = [
   {
     label: "Почта",
     inputName: "email",
+    inputId: "email",
   },
   {
     label: "Логин",
-    inputName: "login"
+    inputName: "login",
+    inputId: "login",
   },
   {
     label: "Имя",
-    inputName: "first_name"
+    inputName: "first_name",
+    inputId: "first_name",
   },
   {
     label: "Фамилия",
-    inputName: "second_name"
+    inputName: "second_name",
+    inputId: "second_name",
   },
   {
     label: "Телефон",
-    inputName: "phone"
+    inputName: "phone",
+    inputId: "phone",
   },
   {
     label: "Пароль",
-    inputName: "password"
+    inputName: "password",
+    inputId: "password",
   },
   {
     label: "Пароль (ещё раз)",
-    inputName: "password"
+    inputName: "password",
+    inputId: "password2",
   },
 ];
 
 export const signInFields = [
   {
     label: "Логин",
-    inputName: "login"
+    inputName: "login",
+    inputId: "login",
   },
   {
     label: "Пароль",
     inputName: "password",
+    inputId: "password",
   },
 ];
 
@@ -75,36 +84,42 @@ export const editProfileFields = [
     fieldName: "first_name",
     value: "Марина",
     type: "text",
+    inputId: "first_name",
   },
   {
     label: "Фамилия",
     fieldName: "second_name",
     value: "Фамильная",
     type: "text",
+    inputId: "second_name",
   },
   {
     label: "Имя в чате",
     fieldName: "display_name",
     value: "mArInChIk",
     type: "text",
+    inputId: "display_name",
   },
   {
     label: "Логин",
     fieldName: "login",
     value: "marina_name",
     type: "text",
+    inputId: "login",
   },
   {
     label: "Почта",
     fieldName: "email",
     value: "pochta@yandex.ru",
     type: "email",
+    inputId: "email",
   },
   {
     label: "Телефон",
     fieldName: "phone",
     value: "+7(999)999-99-99",
     type: "text",
+    inputId: "phone",
   },
 ];
 
@@ -113,16 +128,19 @@ export const editPassFields = [
     label: "Старый пароль",
     fieldName: "oldPassword",
     type: "password",
+    inputId: "oldPassword",
   },
   {
     label: "Новый пароль",
     fieldName: "newPassword",
     type: "password",
+    inputId: "newPassword",
   },
   {
     label: "Повторите новый пароль",
     fieldName: "newPassword",
     type: "password",
+    inputId: "newPassword2",
   },
 ];
 

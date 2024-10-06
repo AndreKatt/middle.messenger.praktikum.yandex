@@ -5,6 +5,8 @@ type TRequestOptions = {
   data:  Document | XMLHttpRequestBodyInit | null;
 };
 
+type THTTPMethod = (url: string, options: TRequestOptions) => Promise<XMLHttpRequest>
+
 enum Methods {
   GET = 'GET',
   POST = 'POST',
@@ -24,19 +26,19 @@ function queryStringify(data: TRequestOptions['data']) {
 };
 
 export class Fetch {
-  get = (url: string, options: TRequestOptions): Promise<XMLHttpRequest> => {
+  get: THTTPMethod = (url, options) => {
     return this.request(url, {...options, method: Methods.GET}, options.timeout);
   };
 
-  post = (url: string, options: TRequestOptions): Promise<XMLHttpRequest> => {
+  post: THTTPMethod = (url, options) => {
     return this.request(url, {...options, method: Methods.POST}, options.timeout);
   };
 
-  put = (url: string, options: TRequestOptions): Promise<XMLHttpRequest> => {
+  put: THTTPMethod = (url, options) => {
     return this.request(url, {...options, method: Methods.PUT}, options.timeout);
   };
 
-  delete = (url: string, options: TRequestOptions): Promise<XMLHttpRequest> => { 
+  delete: THTTPMethod = (url, options) => { 
     return this.request(url, {...options, method: Methods.DELETE}, options.timeout);
   };
 

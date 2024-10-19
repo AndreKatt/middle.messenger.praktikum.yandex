@@ -1,41 +1,64 @@
+import { UserAvatar } from "../../entities/user-avatar";
+import { profileInfoItems } from "../../assets";
+import { ProfileInfoItem } from "../../shared/profile-info-item";
+import { Button } from "../../shared/button";
+import Block from "../../framework/Block";
+import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
 
-export const ProfilePage = `
-  <main>
-    <div class="profileInfoWrapper">
-      <div class="profileInfoContainer">
-          {{> UserAvatar className="avatarWrapper"}}
+export class ProfilePage extends Block {
+  constructor() {
+    super({
+      userName: profileInfoItems[2].data,
+      UserAvatar: new UserAvatar({
+        className: "avatar-wrapper",
+        iconSrc: PictureFillIcon,
+      }),
+      ProfileInfoItems: profileInfoItems.map(item => 
+        new ProfileInfoItem({...item})
+      ),
+      EditProfileButton: new Button({
+        label: "Изменить данные",
+        className: "edit-button",
+        onClick: () => this.AppService.ChangePage("/edit"),
+      }),
+      EditPassButton: new Button({
+        label: "Изменить пароль",
+        className: "edit-button",
+        onClick: () => this.AppService.ChangePage("/editPassword"),
+      }),
+      LogOutButton: new Button({
+        label: "Выйти",
+        className: "logout-button",
+        onClick: () => this.AppService.ChangePage("/auth"),
+      }),
+    })
+  }
 
-          <h1 class="userName">{{name}}</h1>
-
-          {{#each infoItems}}
-            {{> ProfileInfoItem label=this.label data=this.data }}
-          {{/each}}
-
-        <div class="footerContainer">
-          <div class="editButtonWrapper">
-            {{> Button
-              id="btnToEdit"
-              label=editData
-              className="editButton"
-            }}
+  override render() {
+      return `
+        <main>
+          <div class="profile-info-wrapper">
+            <div class="profile-info-container">
+                {{{ UserAvatar }}}
+                <h1 class="user-name">{{userName}}</h1>
+  
+                {{{ ProfileInfoItems }}}
+  
+              <div class="footer-container">
+                <div class="edit-button-wrapper">
+                  {{{ EditProfileButton }}}
+                </div>
+                <div class="edit-button-wrapper">
+                  {{{ EditPassButton }}}
+                </div>
+                {{{ LogOutButton }}}
+              </div>
+  
+              <a href="/home" class="nav-link">Назад</a>
+            </div>
           </div>
-          <div class="editButtonWrapper">
-            {{> Button
-              id="btnToEditPass"
-              label=editPass
-              className="editButton"
-            }}
-          </div>
-            {{> Button
-              id="btnToAuth"
-              label=logOut 
-              className="logoutButton"
-            }}
-        </div>
-
-        <a href="/home" class="navLink">Назад</a>
-      </div>
-    </div>
-  </main>
-`;
+        </main>
+      `;
+  }
+};

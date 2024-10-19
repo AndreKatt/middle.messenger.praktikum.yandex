@@ -3,11 +3,14 @@
 	height: 100%;
 
   --color-primary: #3369F3;
-  --color-secondary: #999999;
+  --color-secondary: #999;
+  --color-text: #1E1E1E;
+  --color-light-blue: #E4EDFD;
+  --color-error: #FF2F2F;
 }
 
 body {
-  font-family: "Inter", "Arial", sans-serif;
+  font-family: Inter, Arial, sans-serif;
   font-size: 13px;
 }
 
@@ -17,6 +20,8 @@ h4, h5, h6, p, a, ol, ul, li, form, label {
   padding: 0;
   border: 0;
   vertical-align: baseline;
+  color: var(--color-text);
+  font-weight: 500;
 }
 
 main, footer {
@@ -39,6 +44,13 @@ input {
   border: none;
 }
 
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+	appearance:none;
+}
+
 a.text:active, a.text:hover, a {
   text-decoration: none;
   color: var(--color-primary);
@@ -50,7 +62,7 @@ a.text:active, a.text:hover, a {
 }
 
 button {
-  font-family: "Inter", "Arial", sans-serif;
+  font-family: Inter, Arial, sans-serif;
   font-size: 13px;
   color: white;
   background-color: var(--color-primary);

@@ -1,6 +1,6 @@
 import PictureFillIcon from "./assets/PictureFill.svg";
 
-const profileInfoItems = [
+export const profileInfoItems = [
   {
     data: "pochta@yandex.ru",
     label: "Почта",
@@ -27,142 +27,150 @@ const profileInfoItems = [
   },
 ];
 
-const signUpFields = [
+export const signUpFields = [
   {
     label: "Почта",
-    fieldName: "email",
+    inputName: "email",
+    inputId: "email",
   },
   {
     label: "Логин",
-    fieldName: "login"
+    inputName: "login",
+    inputId: "login",
   },
   {
     label: "Имя",
-    fieldName: "first_name"
+    inputName: "first_name",
+    inputId: "first_name",
   },
   {
     label: "Фамилия",
-    fieldName: "second_name"
+    inputName: "second_name",
+    inputId: "second_name",
   },
   {
     label: "Телефон",
-    fieldName: "phone"
+    inputName: "phone",
+    inputId: "phone",
   },
   {
     label: "Пароль",
-    fieldName: "password"
+    inputName: "password",
+    inputId: "password",
   },
   {
     label: "Пароль (ещё раз)",
-    fieldName: "password"
+    inputName: "password",
+    inputId: "password2",
   },
 ];
 
-export const signInTemplateProps = {
-  fields: [
-    {
-      label: "Логин",
-      fieldName: "login"
-    },
-    {
-      label: "Пароль",
-      fieldName: "password",
-    },
-  ],
-  submitButtonLabel: "Войти",
-  signButton: {
-    id: "btnToSignUp",
-    label: "Нет аккаунта?",
+export const signInFields = [
+  {
+    label: "Логин",
+    inputName: "login",
+    inputId: "login",
   },
-};
-
-export const signUpTemplateProps = {
-  fields: signUpFields,
-  submitButtonLabel: "Зарегистрироваться",
-  signButton: {
-    label: "Войти",
-    id: "btnToAuth"
+  {
+    label: "Пароль",
+    inputName: "password",
+    inputId: "password",
   },
-};
+];
 
-export const homeTemplateProps = {
-  text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-  time: "10:34",
-  countNewMessages: 3,
-};
+export const editProfileFields = [
+  {
+    label: "Имя",
+    fieldName: "first_name",
+    value: "Марина",
+    type: "text",
+    inputId: "first_name",
+  },
+  {
+    label: "Фамилия",
+    fieldName: "second_name",
+    value: "Фамильная",
+    type: "text",
+    inputId: "second_name",
+  },
+  {
+    label: "Имя в чате",
+    fieldName: "display_name",
+    value: "mArInChIk",
+    type: "text",
+    inputId: "display_name",
+  },
+  {
+    label: "Логин",
+    fieldName: "login",
+    value: "marina_name",
+    type: "text",
+    inputId: "login",
+  },
+  {
+    label: "Почта",
+    fieldName: "email",
+    value: "pochta@yandex.ru",
+    type: "email",
+    inputId: "email",
+  },
+  {
+    label: "Телефон",
+    fieldName: "phone",
+    value: "+7(999)999-99-99",
+    type: "text",
+    inputId: "phone",
+  },
+];
 
-export const profileTemplateProps = {
-  infoItems: profileInfoItems,
-  name: profileInfoItems[2].data,
-  editData: "Изменить данные",
-  editPass: "Изменить пароль",
-  logOut: "Выйти",
-  iconSrc: PictureFillIcon,
-};
+export const editPassFields = [
+  {
+    label: "Старый пароль",
+    fieldName: "oldPassword",
+    type: "password",
+    inputId: "oldPassword",
+  },
+  {
+    label: "Новый пароль",
+    fieldName: "newPassword",
+    type: "password",
+    inputId: "newPassword",
+  },
+  {
+    label: "Повторите новый пароль",
+    fieldName: "newPassword",
+    type: "password",
+    inputId: "newPassword2",
+  },
+];
 
-export const editProfileTemplateProps = {
-  fields: [
-    {
-      label: "Имя",
-      fieldName: "first_name",
-      value: "Марина",
-      type: "text",
-    },
-    {
-      label: "Фамилия",
-      fieldName: "second_name",
-      value: "Фамильная",
-      type: "text",
-    },
-    {
-      label: "Имя в чате",
-      fieldName: "display_name",
-      value: "mArInChIk",
-      type: "text",
-    },
-    {
-      label: "Логин",
-      fieldName: "login",
-      value: "marina_name",
-      type: "text",
-    },
-    {
-      label: "Почта",
-      fieldName: "email",
-      value: "pochta@yandex.ru",
-      type: "email",
-    },
-    {
-      label: "Телефон",
-      fieldName: "phone",
-      value: "+7(999)999-99-99",
-      type: "text",
-    },
-  ],
-  iconSrc: PictureFillIcon,
-  submitButton: "Сохранить",
-  cancelButton: "Отмена",
-};
+export const chats = [
+  {
+    userName: 'Андрей',
+    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+    time: '12:43',
+    newMessagesCount: 2,
+    avatarIconSrc: PictureFillIcon,
+  },
+  {
+    userName: 'Bestie',
+    message: 'OLOLOlololo azazalolo hahhahah you know :D',
+    time: 'Пн',
+    newMessagesCount: 0,
+    avatarIconSrc: PictureFillIcon,
+  }
+];
 
-export const editPassTemplateProps = {
-  fields: [
-    {
-      label: "Старый пароль",
-      fieldName: "oldPassword",
-      type: "password",
-    },
-    {
-      label: "Новый пароль",
-      fieldName: "newPassword",
-      type: "password",
-    },
-    {
-      label: "Повторите новый пароль",
-      fieldName: "newPassword",
-      type: "password",
-    },
-  ],
-  iconSrc: PictureFillIcon,
-  submitButton: "Сохранить",
-  cancelButton: "Отмена",
-};
+export const selectedChat = [
+  {
+    text: "Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой. Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.",
+    time: "11:56",
+    isCurrentUser: false,
+  },
+  {
+    text: "Чел, соре, меня интересуют другие материи",
+    time: "12:08",
+    isCurrentUser: true,
+    isChecked: true,
+  }
+]

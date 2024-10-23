@@ -3,6 +3,7 @@ import { Button } from "../../shared/button";
 import { MessageItem } from "../../shared/message-item";
 import { UserAvatar } from "../../entities/user-avatar";
 import { ChatPreview } from "../../entities/chat-preview";
+import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
 import PictureFillIcon from "../../assets/PictureFill.svg";
@@ -18,7 +19,7 @@ export class HomePage extends Block {
         label: "Профиль",
         className: "chats-button-to-profile",
         buttonIconSrc: ArrowRightIcon,
-        onClick: () => this.AppService.ChangePage("/profile"),
+        onClick: () => this.RouterService.go(Routes.PROFILE),
       }),
       Chats: chats.map(chat => new ChatPreview({ ...chat })),
       UserAvatar: new UserAvatar({

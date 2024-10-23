@@ -1,6 +1,7 @@
 import { validate } from "../../utils/validate";
 import { Button } from "../../shared/button";
 import { Input } from "../../shared/input";
+import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import "./styles.pcss";
 
@@ -74,7 +75,7 @@ export class AuthForm extends Block {
 
           if (hasErrors) return;
 
-          this.AppService.ChangePage("/profile")
+          this.RouterService.go(Routes.PROFILE)
         },
       }),
       SignButton: new Button({

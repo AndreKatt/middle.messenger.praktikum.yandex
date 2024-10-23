@@ -3,6 +3,7 @@ import { UserAvatar } from "../user-avatar";
 import { Button } from "../../shared/button";
 import { ProfileEditItem } from "../../shared/profile-edit-item";
 import { Input } from "../../shared/input";
+import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import "./styles.pcss";
 
@@ -80,14 +81,14 @@ export class EditForm extends Block {
 
           if (hasErrors) return;
 
-          this.AppService.ChangePage("/profile");
+          this.RouterService.go(Routes.PROFILE);
         },
 
       }),
       CancelButton: new Button({
         label: props.cancelButtonLabel,
         className: "cancel-button",
-        onClick: () => this.AppService.ChangePage("/profile"),
+        onClick: () => this.RouterService.go(Routes.PROFILE),
       }),
     });
   }

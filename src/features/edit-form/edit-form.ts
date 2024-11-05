@@ -1,5 +1,5 @@
 import { validate } from "../../utils/validate";
-import { UserAvatar } from "../user-avatar";
+import { UserAvatar } from "../../entities/user-avatar";
 import { Button } from "../../shared/button";
 import { ProfileEditItem } from "../../shared/profile-edit-item";
 import { Input } from "../../shared/input";
@@ -7,7 +7,12 @@ import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import "./styles.pcss";
 
+export type TUserFormData = Record<string, string>;
+
+export type TFormType = "profile" | "password";
+
 type TEditFormProps = {
+  formType: TFormType;
   avatarImageSrc?: string;
   avatarIconSrc: string;
   ProfileEditItems: {
@@ -16,8 +21,11 @@ type TEditFormProps = {
     fieldName: string;
     type: string;
     inputId: string;
-  }[]
-  submitButtonLabel: string;
+  }[];
+  SubmitButton: {
+    label: string;
+    onSubmit: (formType: TFormType, userData: TUserFormData) => Promise<number>
+  }
   cancelButtonLabel: string;
   formId: string;
 }
@@ -32,7 +40,7 @@ export class EditForm extends Block {
         imageSrc: props.avatarImageSrc,
       }),
       ProfileEditItems: props.ProfileEditItems.map((field, idx) => 
-        new ProfileEditItem({ 
+        new ProfileEditItem({
           ...field,
           inputClassName: "edit-profile-input",
           onBlur: () => {
@@ -56,10 +64,11 @@ export class EditForm extends Block {
         })
       ),
       SubmitButton: new Button({
-        label: props.submitButtonLabel,
+        label: props.SubmitButton.label,
         className: "submit-button",
-        onClick: () => {
+        onClick: async () => {
           let hasErrors = false;
+          const userData: TUserFormData = {} as never;
           const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
           const formData = new FormData(form);
 
@@ -76,14 +85,17 @@ export class EditForm extends Block {
 
               return;
             }
-            console.log(`${field.fieldName}: ${fieldValue}`);
+            userData[field.fieldName as keyof TUserFormData] = fieldValue as string;
           });
 
           if (hasErrors) return;
 
-          this.RouterService.go(Routes.PROFILE);
+          const result = await props.SubmitButton.onSubmit(props.formType, userData);
+          
+          if (result === 200) {
+            this.RouterService.go(Routes.PROFILE);
+          }
         },
-
       }),
       CancelButton: new Button({
         label: props.cancelButtonLabel,

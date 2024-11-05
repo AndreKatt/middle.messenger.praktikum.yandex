@@ -5,4 +5,4 @@ export { EditProfilePage } from "./edit";
 export { EditPasswordPage } from "./edit-pass";
 export { NotFoundPage } from "./not-found";
 export { ServerErrorPage } from "./server-error";
-export { HomePage } from "./home";
+export { MessengerPage } from "./messenger";

@@ -2,7 +2,7 @@ import Router, { Routes } from "./framework/Router";
 import { 
   EditPasswordPage,
   EditProfilePage,
-  HomePage,
+  MessengerPage,
   NotFoundPage, 
   ProfilePage, 
   ServerErrorPage, 
@@ -18,7 +18,7 @@ export default class App {
       .use(Routes.AUTH, SignInPage)
       ?.use(Routes.SIGN_UP, SignUpPage)
       ?.use(Routes.PROFILE, ProfilePage)
-      ?.use(Routes.MESSENGER, HomePage)
+      ?.use(Routes.MESSENGER, MessengerPage)
       ?.use(Routes.SETTINGS, EditProfilePage)
       ?.use(Routes.PASSWORD_SETTINGS, EditPasswordPage)
       ?.use(Routes.NOT_FOUND, NotFoundPage)

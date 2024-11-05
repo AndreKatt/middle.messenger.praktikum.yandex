@@ -16,7 +16,7 @@ export class ProfileEditItem extends Block {
   constructor(props: TProfileEditItemProps) {
     super({ 
       ...props,
-      value: props.value || '',
+      value: props.value,
       EditItemField: new EditItemField({ ...props }),
     });
   }
@@ -57,7 +57,9 @@ class EditItemField extends Block {
         class={{inputClassName}}
         type={{type}}
         name={{fieldName}}
-        placeholder={{value}}
+        {{#if value}}
+          placeholder={{value}}
+        {{/if}}
       />
     `
   }

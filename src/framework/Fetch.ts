@@ -1,8 +1,8 @@
 type TRequestOptions = {
   timeout: number;
   method: `${Methods}`;
-  headers: Record<string, string>;
-  data:  Document | XMLHttpRequestBodyInit | null;
+  headers?: Record<string, string>;
+  data?: Document | XMLHttpRequestBodyInit | null;
 };
 
 type THTTPMethod = (url: string, options: TRequestOptions) => Promise<XMLHttpRequest>
@@ -47,7 +47,7 @@ export class Fetch {
     options: Partial<TRequestOptions>, 
     timeout = 5000
   ): Promise<XMLHttpRequest> => {
-    const {headers = {}, method, data} = options || {};
+    const {headers, method, data} = options || {};
 
     return new Promise(function(resolve, reject) {
       if (!method) {
@@ -64,10 +64,13 @@ export class Fetch {
         ? `${url}${queryStringify(data)}`
         : url,
       );
+      xhr.withCredentials = true;
 
-      Object.keys(headers).forEach(key => {
-        xhr.setRequestHeader(key, headers[key]);
-      });
+      if (headers) {
+        Object.keys(headers).forEach(key => {
+          xhr.setRequestHeader(key, headers[key]);
+        });
+      }
 
       xhr.onload = function() {
         resolve(xhr);

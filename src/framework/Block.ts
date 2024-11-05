@@ -2,7 +2,7 @@ import EventBus, { EventCallback } from './EventBus';
 import Handlebars from 'handlebars';
 import Router from './Router';
 
-type TBlockProps = {
+export type TBlockProps = {
   [key: string]: unknown;
 }
 
@@ -131,8 +131,24 @@ export default class Block {
     if (!nextProps) {
       return;
     }
+    const { props, children, lists } = this._getChildrenPropsAndProps(nextProps);
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props, props);
+    Object.assign(this.children, children);
+    Object.assign(this.lists, lists);
+    this._render();
+  };
+
+  public deleteLists = (...args: Array<keyof TBlockProps>): void => {
+    if (!args.length) {
+      return;
+    }
+
+    args.forEach(prop => {
+      delete this.lists?.[prop];
+    })
+
+    this._render()
   };
 
   get element(): HTMLElement | null {

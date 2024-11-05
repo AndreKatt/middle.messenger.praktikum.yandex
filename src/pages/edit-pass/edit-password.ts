@@ -18,9 +18,9 @@ export class EditPasswordPage extends Block {
         SubmitButton: {
           label: "Сохранить",
           onSubmit: async (formType: TFormType, userData: TUserFormData) => {
-            const result = await this.editFormService.PutUser(formType, userData);
+            const status = await this.editFormService.PutUser(formType, userData);
 
-            return result;
+            return status;
           },
         }
       }),

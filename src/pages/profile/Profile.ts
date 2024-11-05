@@ -88,6 +88,8 @@ export class ProfilePage extends Block {
             new ProfileInfoItem(item)
           ),
         })
+      } else if (result.status === 401) {
+        this.RouterService.go(Routes.AUTH);
       }
     });
   };

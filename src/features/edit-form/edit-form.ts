@@ -90,10 +90,12 @@ export class EditForm extends Block {
 
           if (hasErrors) return;
 
-          const result = await props.SubmitButton.onSubmit(props.formType, userData);
+          const status = await props.SubmitButton.onSubmit(props.formType, userData);
           
-          if (result === 200) {
+          if (status === 200) {
             this.RouterService.go(Routes.PROFILE);
+          } else if (status === 401) {
+            this.RouterService.go(Routes.AUTH);
           }
         },
       }),

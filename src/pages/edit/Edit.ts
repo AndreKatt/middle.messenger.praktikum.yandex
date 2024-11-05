@@ -1,5 +1,6 @@
 import { EditForm } from "../../features/edit-form";
 import { EditProfileService } from "./edit-profile.service";
+import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import { TFormType, TUserFormData } from "../../features/edit-form/edit-form";
@@ -78,6 +79,8 @@ export class EditProfilePage extends Block {
             }
           }),
         });
+      } else if (result.status === 401) {
+        this.RouterService.go(Routes.AUTH);
       }
     });
   }

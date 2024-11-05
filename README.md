@@ -21,19 +21,17 @@ https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0
 
 Netlify: https://deploy--messennger.netlify.app
 
-По данной ссылке доступно меню с переходом на все части приложения
+Войти: https://deploy--messennger.netlify.app
 
-Войти: https://deploy--messennger.netlify.app/auth
+Зарегистрироваться: https://deploy--messennger.netlify.app/sign-up
 
-Зарегистрироваться: https://deploy--messennger.netlify.app/signUp
-
-Чаты: https://deploy--messennger.netlify.app/home
+Чаты: https://deploy--messennger.netlify.app/messenger
 
 Профиль: https://deploy--messennger.netlify.app/profile
 
-Изменить данные: https://deploy--messennger.netlify.app/edit
+Изменить данные: https://deploy--messennger.netlify.app/settings
 
-Изменить пароль: https://deploy--messennger.netlify.app/editPage
+Изменить пароль: https://deploy--messennger.netlify.app/settings-password
 
 Not Found: https://deploy--messennger.netlify.app/404
 
@@ -41,3 +39,8 @@ Server Error: https://deploy--messennger.netlify.app/error
 
 Переходы на все страницы также реализованы по клику на кнопки внутри приложения,
 за исключением страниц Not Found и Server Error
+
+## Создание чата:
+* на странице чатов в поиске ввести логин пользователя
+* по клику на одного из пользователей в появившемся списке создастся новый чат
+* новый чат будет доступен после обновления страницы

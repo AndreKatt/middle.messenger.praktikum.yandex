@@ -34,7 +34,7 @@ export class ChatPreview extends Block {
           {{{ UserAvatar }}}
         </div>
 
-        <div>
+        <div class="chat-preview-text-info-container">
           <p class="chat-preview-user-name">
             {{userName}}
           </p>

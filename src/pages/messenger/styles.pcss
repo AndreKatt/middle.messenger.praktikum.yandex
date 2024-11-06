@@ -75,10 +75,16 @@
   margin: 0 20px;
 }
 
+.chat-user-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #EAEAEA;
+}
+
 .chat-user-info-container {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid #EAEAEA;
 }
 
 .chat-avatar-wrapper {
@@ -92,6 +98,24 @@
   & img {
     height: 15px;
     width: 15px;
+  }
+}
+
+.chat-delete-button {
+  width: 43px;
+  height: 43px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+
+  &:hover {
+    background-color: #EAEAEA;
+  }
+  
+  & img {
+    width: 23px;
   }
 }
 

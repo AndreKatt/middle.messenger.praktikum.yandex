@@ -33,12 +33,12 @@ export class AuthService {
     );
 
     if (response.status === 200) {
-      const data = JSON.parse(response.response)?.data;
-      if (data) {
-        localStorage.setItem("id", data.id)
+      if (formType === "signup") {
+        const id = JSON.parse(response.response)?.id;
+        localStorage.setItem("id", id)
       } else {
         const result = await this.requestService.get(
-          getEndPoint(authEndPoint, formType),
+          getEndPoint(authEndPoint, "user"),
           {
             method: "GET",
             timeout: 0,

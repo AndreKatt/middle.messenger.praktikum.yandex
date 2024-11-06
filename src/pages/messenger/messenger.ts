@@ -7,6 +7,7 @@ import { MessengerService } from "./messenger.service";
 import Block from "../../framework/Block";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
 import PictureFillIcon from "../../assets/PictureFill.svg";
+import DeleteIcon from "../../assets/Delete.svg";
 import AttachIcon from "../../assets/Attach.svg";
 import CheckedIcon from "../../assets/Checked.svg";
 import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
@@ -72,30 +73,69 @@ export class MessengerPage extends Block {
   protected chats: TChatData[] = [];
   protected socket: WebSocket | null = null;
   protected selectedChat: TMessageData[] = [];
+  protected currentChatId: number | null = null;
 
   protected readonly messengerService = new MessengerService();
   protected readonly currentUserId = localStorage.getItem("id");
 
-  protected setChatData(data: TMessageData[], title: string) {
-    this.selectedChat = data.reverse();
-    this.setProps({
-      selectedChatTitle: title,
-      Messages: this.selectedChat.map((message, idx) => {
-        let dateString = "";
-        if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
-          dateString = getDateString(message.time, true);
-        }
+  protected async setChatData(title: string, chatId: number) {
+    this.currentChatId = chatId;
+    const socket = await this.messengerService.ConnectToChat(chatId);
 
-        return new MessageItem({
-          text: message.content,
-          time: getTimeString(new Date(message.time)),
-          isChecked: message.is_read,
-          isCurrentUser: message.user_id == this.currentUserId,
-          date: dateString && dateString
-        })
-      }),
-      hasMessages: !!this.selectedChat.length,
-    });
+    if (socket) {
+      this.socket = socket;
+      socket.addEventListener('message', event => {
+        const data = JSON.parse(event.data);
+
+        if (Array.isArray(data)) {
+          this.selectedChat = data.reverse();
+          this.setProps({
+            selectedChatTitle: title,
+            Messages: this.selectedChat.map((message, idx) => {
+              let dateString = "";
+              if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
+                dateString = getDateString(message.time, true);
+              }
+
+              return new MessageItem({
+                text: message.content,
+                time: getTimeString(new Date(message.time)),
+                isChecked: message.is_read,
+                isCurrentUser: message.user_id == this.currentUserId,
+                date: dateString && dateString
+              })
+            }),
+            hasMessages: !!this.selectedChat.length,
+          });
+        } else if (data.type !== "pong") {
+          this.messengerService.GetChatMessages(socket);
+        }
+      });
+    }
+  }
+
+  protected async updateChats() {
+    const result = await this.messengerService.GetChats();
+
+    if (result.status === 200) {
+      const chats: TChatData[] = JSON.parse(result.response);
+        
+      if (!!chats.length) {
+        this.setProps({
+          Chats: chats.map(chat => new ChatPreview({
+            userName: chat.title,
+            message: chat?.last_message?.content,
+            time: getDateString(chat?.last_message?.time),
+            newMessagesCount: chat?.unread_count,
+            avatarIconSrc: PictureFillIcon,
+            avatarImageSrc: chat?.avatar,
+            onClick: () => this.setChatData(chat.title, chat.id),
+          })),
+        });
+      }
+    } else if (result.status === 401) {
+      this.RouterService.go(Routes.AUTH);
+    }
   }
 
   constructor() {
@@ -146,26 +186,14 @@ export class MessengerPage extends Block {
 
                     if (result || hasChat) {
                       this.deleteLists("Users");
+                      this.updateChats();
                       this.setProps({
                         selectedChatTitle: user.login,
                         hasMessages: false,
                       });
 
                       const chatId = JSON.parse(result).id;
-                      const socket = await this.messengerService.ConnectToChat(chatId);
-
-                      if (socket) {
-                        this.socket = socket;
-                        socket.addEventListener('message', event => {
-                          const data = JSON.parse(event.data);
-
-                          if (Array.isArray(data)) {
-                            this.setChatData(data, user.login);
-                          } else if (data.type !== "pong") {
-                            this.messengerService.GetChatMessages(socket);
-                          }
-                        });
-                      }
+                      this.setChatData(user.login, chatId);
                     }
                   },
                 })),
@@ -179,6 +207,23 @@ export class MessengerPage extends Block {
       UserAvatar: new UserAvatar({
         className: "chat-avatar",
         iconSrc: PictureFillIcon,
+      }),
+      DeleteChatButton: new Button({
+        buttonIconSrc: DeleteIcon,
+        alt: "Удалить",
+        className: "chat-delete-button",
+        onClick: async () => {
+          if (this.currentChatId) {
+            const { status } = await this.messengerService.DeleteChatById(this.currentChatId)
+
+            if (status === 200) {
+              this.setProps({
+                selectedChatTitle: undefined,
+              })
+              this.updateChats();
+            }
+          }
+        },
       }),
       AttachButton: AttachButton,
       SendButton: new Button({
@@ -204,44 +249,7 @@ export class MessengerPage extends Block {
       formId: "messageForm",
     });
 
-    setTimeout(async () => {
-      const result = await this.messengerService.GetChats();
-
-      if (result.status === 200) {
-        const chats: TChatData[] = JSON.parse(result.response);
-        
-        if (!!chats.length) {
-          this.setProps({
-            Chats: chats.map(chat => new ChatPreview({
-              userName: chat.title,
-              message: chat?.last_message?.content,
-              time: getDateString(chat?.last_message?.time),
-              newMessagesCount: chat?.unread_count,
-              avatarIconSrc: PictureFillIcon,
-              avatarImageSrc: chat?.avatar,
-              onClick: async () => {
-                const socket = await this.messengerService.ConnectToChat(chat.id);
-
-                if (socket) {
-                  this.socket = socket;
-                  socket.addEventListener('message', event => {
-                    const data = JSON.parse(event.data);
-
-                    if (Array.isArray(data)) {
-                      this.setChatData(data, chat.title);
-                    } else if (data.type !== "pong") {
-                      this.messengerService.GetChatMessages(socket);
-                    }
-                  });
-                }
-              },
-            })),
-          });
-        }
-      } else if (result.status === 401) {
-        this.RouterService.go(Routes.AUTH);
-      }
-    });
+    setTimeout(() => this.updateChats());
   };
 
   override render() {
@@ -260,13 +268,16 @@ export class MessengerPage extends Block {
 
           <div class="chat-container">
             {{#if selectedChatTitle}}
-              <div class="chat-user-info-container">
-                <div class="chat-avatar-wrapper">
-                  {{{ UserAvatar }}}
+              <div class="chat-user-info-wrapper">
+                <div class="chat-user-info-container">
+                  <div class="chat-avatar-wrapper">
+                    {{{ UserAvatar }}}
+                  </div>
+                  <p class="chat-preview-user-name">
+                    {{ selectedChatTitle }}
+                  </p>
                 </div>
-                <p class="chat-preview-user-name">
-                  {{ selectedChatTitle }}
-                </p>
+                {{{ DeleteChatButton }}}
               </div>
 
               <div class="chat-history-container">

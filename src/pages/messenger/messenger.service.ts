@@ -37,8 +37,8 @@ export class MessengerService {
     if (result.status === 200) {
       const data: { id: string } = JSON.parse(result.response);
 
-      const { status, response } = await this.requestService.put(
-        getEndPoint(CHATS_ENDPOINT, "users"),
+      const { status } = await this.requestService.put(
+        getEndPoint(CHATS_ENDPOINT),
         {
           data: JSON.stringify({
             users: [userId],
@@ -53,7 +53,7 @@ export class MessengerService {
       );
 
       if (status === 200) {
-        return response;
+        return result.response;
       }
     }
   }
@@ -121,5 +121,23 @@ export class MessengerService {
       content: 0,
       type: "get old"
     }));
+  }
+
+  public async DeleteChatById(chatId: number) {
+    const result = await this.requestService.delete(
+      CHATS_ENDPOINT,
+      {
+        data: JSON.stringify({
+          chatId: chatId
+        }),
+        method: "DELETE",
+        timeout: 0,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return result;
   }
 };

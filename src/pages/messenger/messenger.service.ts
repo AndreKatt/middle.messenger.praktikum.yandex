@@ -1,5 +1,5 @@
 import { Fetch } from "../../framework/Fetch";
-import { API_URL, getEndPoint, WS_API_URL } from "../../utils/getEndPoint";
+import { API_URL, getEndPoint, userEndPoint, WS_API_URL } from "../../utils/getEndPoint";
 
 const CHATS_ENDPOINT = getEndPoint(API_URL, "chats");
 
@@ -25,7 +25,7 @@ export class MessengerService {
     }
   }
 
-  public async PostChat(title: string, userId: number) {
+  public async PostChat(title: string) {
     try {
       const result = await this.requestService.post(
         CHATS_ENDPOINT,
@@ -38,29 +38,31 @@ export class MessengerService {
           },
         }
       );
-      
-      if (result.status === 200) {
-        const data: { id: string } = JSON.parse(result.response);
-  
-        const { status } = await this.requestService.put(
-          getEndPoint(CHATS_ENDPOINT, "users"),
-          {
-            data: JSON.stringify({
-              users: [userId],
-              chatId: data.id
-            }),
-            method: "PUT",
-            timeout: 0,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-  
-        if (status === 200) {
-          return result.response;
+
+      return result;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async AddUserToChat(userId: string, chatId: number) {
+    try {
+      const result = await this.requestService.put(
+        getEndPoint(CHATS_ENDPOINT, "users"),
+        {
+          data: JSON.stringify({
+            users: [userId],
+            chatId: chatId
+          }),
+          method: "PUT",
+          timeout: 0,
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      }
+      );
+        
+      return result;
     } catch (e) {
       console.log(e);
     }
@@ -69,7 +71,7 @@ export class MessengerService {
   public async GetUsersByLogin(login: string) {
     try {
       const result = await this.requestService.post(
-        getEndPoint(API_URL, "user", "search"),
+        getEndPoint(userEndPoint, "search"),
         {
           data: JSON.stringify({login: login}),
           method: "POST",
@@ -77,6 +79,22 @@ export class MessengerService {
           headers: {
             "Content-Type": "application/json",
           },
+        }
+      );
+  
+      return result;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async GetChatsUsers(chatId: number) {
+    try {
+      const result = await this.requestService.get(
+        getEndPoint(CHATS_ENDPOINT, `${chatId}/users`),
+        {
+          method: "GET",
+          timeout: 0,
         }
       );
   
@@ -139,6 +157,50 @@ export class MessengerService {
         content: 0,
         type: "get old"
       }));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async UploadAvatar(file: File, chatId: unknown) {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      formData.append("chatId", chatId as string);
+
+      const data = await this.requestService.put(
+        getEndPoint(CHATS_ENDPOINT, "avatar"),
+        {
+          data: formData,
+          method: "PUT",
+          timeout: 0,
+        }
+      );
+  
+      return data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async DeleteUserFromChat(chatId: number, userId: number) {
+    try {
+      const result = await this.requestService.delete(
+        getEndPoint(CHATS_ENDPOINT, "users"),
+        {
+          data: JSON.stringify({
+            users: [userId],
+            chatId: chatId
+          }),
+          method: "DELETE",
+          timeout: 0,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      return result;
     } catch (e) {
       console.log(e);
     }

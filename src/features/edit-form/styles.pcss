@@ -7,10 +7,42 @@
   justify-content: center;
 }
 
-.edit-profile-avatar-wrapper {
+.edit-profile-avatar-placeholder-wrapper,
+.edit-profile-change-avatar-placeholder-wrapper,
+.edit-profile-avatar-wrapper,
+.edit-profile-change-avatar-wrapper {
   width: 130px;
   height: 130px;
   margin-bottom: 60px;
+}
+
+.edit-profile-avatar-wrapper,
+.edit-profile-change-avatar-wrapper {
+  & img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+}
+
+.edit-profile-change-avatar-placeholder-wrapper,
+.edit-profile-change-avatar-wrapper {
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  
+  &:hover {
+    filter: brightness(70%);
+
+    & .avatar-container::after {
+      content: "Изменить аватар";
+      position: absolute;
+    }
+  }
+}
+
+.hidden-input {
+  display: none;
 }
 
 .submit-button {

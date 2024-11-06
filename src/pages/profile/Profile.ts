@@ -6,6 +6,7 @@ import { ProfileService } from "./profile.service";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
+import { getAvatarSrc } from "../../utils/getEndPoint";
 
 type TUserData = {
   email: string;
@@ -88,6 +89,11 @@ export class ProfilePage extends Block {
 
         this.setProps({
           userName: data.first_name,
+          UserAvatar: new UserAvatar({
+            className: data.avatar ? "avatar-wrapper" : "avatar-placeholder-wrapper",
+            iconSrc: PictureFillIcon,
+            imageSrc: getAvatarSrc(data.avatar),
+          }),
           ProfileInfoItems: profileInfoItems.map(item => 
             new ProfileInfoItem(item)
           ),

@@ -1,20 +1,36 @@
+import { getDateString, getTimeString } from "../../utils/getDateString";
+import { isSameDate } from "../../utils/isSameDate";
+import { getAvatarSrc } from "../../utils/getEndPoint";
+import { Routes } from "../../framework/Router";
 import { Button } from "../../shared/button";
 import { MessageItem } from "../../shared/message-item";
 import { UserAvatar } from "../../entities/user-avatar";
 import { ChatPreview } from "../../entities/chat-preview";
-import { Routes } from "../../framework/Router";
 import { MessengerService } from "./messenger.service";
+import { SearchInput } from "../../shared/search-input";
+import { Input } from "../../shared/input";
+import { ChatUser } from "../../entities/chat-user";
 import Block from "../../framework/Block";
+import AddIcon from "../../assets/Add.svg";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import DeleteIcon from "../../assets/Delete.svg";
 import AttachIcon from "../../assets/Attach.svg";
 import CheckedIcon from "../../assets/Checked.svg";
 import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
+import CloseIcon from "../../assets/Close.svg";
+import UserIcon from "../../assets/User.svg";
 import "./styles.pcss";
-import { SearchInput } from "../../shared/search-input";
-import { getDateString, getTimeString } from "../../utils/getDateString";
-import { isSameDate } from "../../utils/isSameDate";
+
+type TChatUser = {
+  avatar: string | null;
+  display_name: string;
+  first_name: string;
+  id: number;
+  login: string;
+  role: "regular";
+  second_name: string;
+}
 
 type TChatData = {
   id: number;
@@ -36,15 +52,6 @@ type TChatData = {
   };
 };
 
-type TSearchUserData = {
-  id: number;
-  first_name: string;
-  second_name: string;
-  display_name: null;
-  login: string;
-  avatar: string;
-};
-
 type TMessageData = {
   chat_id: number;
   time: string;
@@ -63,6 +70,24 @@ type TMessageData = {
   }           
 };
 
+const AddNewChatModalContent = new Input({
+  label: "Название чата",
+  inputName: "chatName",
+  inputId: "chatName",
+  containerClassName: "field-container",
+  labelClassName: "field-label",
+  inputClassName: "modal-input",
+});
+
+const AddChatUserModalContent = new Input({
+  label: "Логин",
+  inputName: "login",
+  inputId: "login",
+  containerClassName: "field-container",
+  labelClassName: "field-label",
+  inputClassName: "modal-input",
+});
+
 const AttachButton = new Button({
   buttonIconSrc: AttachIcon,
   alt: "Прикрепить",
@@ -78,8 +103,56 @@ export class MessengerPage extends Block {
   protected readonly messengerService = new MessengerService();
   protected readonly currentUserId = localStorage.getItem("id");
 
-  protected async setChatData(title: string, chatId: number) {
+  protected closeModal = () => {
+    this.setProps({
+      isModalOpen: false,
+    });
+    this.deleteLists("ModalContent");
+  }
+
+  protected setChats(chats: TChatData[]) {
+    this.deleteLists("Chats");
+    if (!!chats.length) {
+      this.setProps({
+        Chats: chats.map(chat => new ChatPreview({
+          userName: chat.title,
+          message: chat?.last_message?.content,
+          time: getDateString(chat?.last_message?.time),
+          newMessagesCount: chat?.unread_count,
+          avatarIconSrc: PictureFillIcon,
+          avatarImageSrc: getAvatarSrc(chat.avatar),
+          onClick: () => this.setChatData(chat.title, chat.id, chat.avatar),
+        })),
+      });
+    }
+  }
+
+  protected async setChatData(
+    title: string,
+    chatId: number,
+    chatImg?: string,
+  ) {
     this.currentChatId = chatId;
+    this.setProps({
+      selectedChatTitle: title,
+      ChatAvatar: new UserAvatar({
+        className: chatImg ? "full-chat-img-avatar" : "chat-avatar",
+        iconSrc: PictureFillIcon,
+        imageSrc: getAvatarSrc(chatImg),
+        onClick: () => {
+          const fileInput = document.getElementById("avatar") as HTMLInputElement;
+          fileInput?.click();
+          fileInput.onchange = (e) => {
+            const input = e.target as HTMLInputElement;
+            const file = input.files?.[0];
+
+            if (file && this.currentChatId) {
+              this.messengerService.UploadAvatar(file, this.currentChatId);
+            }
+          }
+        }
+      }),
+    });
     const socket = await this.messengerService.ConnectToChat(chatId);
 
     if (socket) {
@@ -90,7 +163,6 @@ export class MessengerPage extends Block {
           if (Array.isArray(data)) {
             this.selectedChat = data.reverse();
             this.setProps({
-              selectedChatTitle: title,
               Messages: this.selectedChat.map((message, idx) => {
                 let dateString = "";
                 if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
@@ -103,7 +175,7 @@ export class MessengerPage extends Block {
                   isChecked: message.is_read,
                   isCurrentUser: message.user_id == this.currentUserId,
                   date: dateString && dateString
-                })
+                });
               }),
               hasMessages: !!this.selectedChat.length,
             });
@@ -119,33 +191,63 @@ export class MessengerPage extends Block {
 
   protected async updateChats() {
     const result = await this.messengerService.GetChats();
-    if (!result) {
-      return;
-    }
 
-    if (result.status === 200) {
-      const chats: TChatData[] = JSON.parse(result.response);
-        
-      if (!!chats.length) {
-        this.setProps({
-          Chats: chats.map(chat => new ChatPreview({
-            userName: chat.title,
-            message: chat?.last_message?.content,
-            time: getDateString(chat?.last_message?.time),
-            newMessagesCount: chat?.unread_count,
-            avatarIconSrc: PictureFillIcon,
-            avatarImageSrc: chat?.avatar,
-            onClick: () => this.setChatData(chat.title, chat.id),
-          })),
-        });
-      }
-    } else if (result.status === 401) {
+    if (result?.status === 200) {
+      this.chats = JSON.parse(result.response);
+      this.setChats(this.chats);
+    } else if (result?.status === 401) {
       this.RouterService.go(Routes.AUTH);
+    }
+  }
+
+  protected async updateChatUsers() {
+    const response = await this.messengerService.GetChatsUsers(this.currentChatId!);
+
+    if (response?.status === 200) {
+      const users = JSON.parse(response.response) as TChatUser[];
+      this.setProps({
+        ModalContent: users.map((user) => new ChatUser({
+          login: user.login,
+          imageSrc: getAvatarSrc(user.avatar),
+          onDeleteUser: async () => {
+            await this.messengerService.DeleteUserFromChat(this.currentChatId!, user.id);
+            this.updateChatUsers();
+          },
+        })),
+      })
     }
   }
 
   constructor() {
     super({
+      AddNewChatButton: new Button({
+        className: "chats-add-new-button",
+        buttonIconSrc: AddIcon,
+        onClick: () => {
+          this.setProps({
+            isModalOpen: true,
+            modalTitle: "Создать чат",
+            ModalContent: AddNewChatModalContent,
+            ModalSubmitButton: new Button({
+              label: "Создать",
+              className: "modal-button",
+              onClick: async () => {
+                const input = document.getElementById("chatName") as HTMLInputElement;
+                const result = await this.messengerService.PostChat(input.value);
+      
+                if (result?.status === 200) {
+                  this.deleteLists("Messages");
+                  this.setProps({
+                    selectedChatTitle: undefined,
+                  });
+                  await this.updateChats();
+                  this.closeModal();
+                }
+              },
+            }),
+          })
+        },
+      }),
       ButtonToProfile: new Button({
         label: "Профиль",
         className: "chats-button-to-profile",
@@ -154,67 +256,17 @@ export class MessengerPage extends Block {
       }),
       SearchInput: new SearchInput({
         className: "chats-search-input",
-        onInput: async (login) => {
-          if (login.length) {
-            if (this.props.Messages) {
-              this.deleteLists("Messages");      
-            }
-            const result = await this.messengerService.GetUsersByLogin(login);
+        onInput: async(title) => {
+          if (!!title) {
+            setTimeout(() => {
+              const filteredChats = this.chats.filter(chat => chat.title.toLowerCase().includes(title.toLowerCase()));
+              this.setChats(filteredChats);
+            }, 800);
 
-            if (!result) {
-              return;
-            }
-
-            if (!this.chats.length) {
-              const chatsResult = await this.messengerService.GetChats();
-
-              if (chatsResult && chatsResult.status === 200) {
-                this.chats = JSON.parse(chatsResult.response);
-              }
-            }
-            
-            if (result.status === 200) {
-              const data: TSearchUserData[] = JSON.parse(result.response);
-
-              this.setProps({
-                Users: data.map(user => new ChatPreview({
-                  userName: user.login,
-                  message: `${user.first_name} ${user.second_name}`,
-                  time: "",
-                  newMessagesCount: 0,
-                  avatarIconSrc: PictureFillIcon,
-                  avatarImageSrc: user.avatar,
-                  onClick: async () => {
-                    const result = await this.messengerService.PostChat(user.login, user.id);
-
-                    if (result) {
-                      this.deleteLists("Users");
-                      this.updateChats();
-                      this.setProps({
-                        selectedChatTitle: user.login,
-                        hasMessages: false,
-                        isSearchUsers: false,
-                      });
-
-                      const chatId = JSON.parse(result).id;
-                      this.setChatData(user.login, chatId);
-                    }
-                  },
-                })),
-                isSearchUsers: true,
-              })
-            }
             return;
           }
-          this.deleteLists("Users");
-          this.setProps({
-            isSearchUsers: false,
-          });
-        }
-      }),
-      UserAvatar: new UserAvatar({
-        className: "chat-avatar",
-        iconSrc: PictureFillIcon,
+          this.setChats(this.chats);
+        },
       }),
       DeleteChatButton: new Button({
         buttonIconSrc: DeleteIcon,
@@ -224,11 +276,7 @@ export class MessengerPage extends Block {
           if (this.currentChatId) {
             const result = await this.messengerService.DeleteChatById(this.currentChatId)
 
-            if (!result) {
-              return;
-            }
-
-            if (result.status === 200) {
+            if (result?.status === 200) {
               this.setProps({
                 selectedChatTitle: undefined,
               })
@@ -236,6 +284,43 @@ export class MessengerPage extends Block {
             }
           }
         },
+      }),
+      UsersButton: new Button({
+        buttonIconSrc: UserIcon,
+        className: "chat-delete-button",
+        onClick: async () => {
+          this.deleteChilds("ModalContent");
+          this.updateChatUsers();
+          this.setProps({
+            isModalOpen: true,
+            modalTitle: "Пользователи",
+            ModalSubmitButton: new Button({
+              label: "Добавить",
+              className: "modal-button",
+              onClick: () => {
+                this.deleteLists("ModalContent");
+                this.setProps({
+                  modalTitle: "Добавить пользователя",
+                  ModalContent: AddChatUserModalContent,
+                  ModalSubmitButton: new Button({
+                    label: "Добавить",
+                    className: "modal-button",
+                    onClick: async () => {
+                      const input = document.getElementById("login") as HTMLInputElement;
+                      const responseResult = await this.messengerService.GetUsersByLogin(input.value);
+            
+                      if (responseResult?.status === 200 && this.currentChatId) {
+                        const data = JSON.parse(responseResult?.response);
+                        this.messengerService.AddUserToChat(data[0].id, this.currentChatId);
+                        this.closeModal();
+                      }
+                    }
+                  })
+                });
+              },
+            }),
+          });
+        }
       }),
       AttachButton: AttachButton,
       SendButton: new Button({
@@ -257,9 +342,13 @@ export class MessengerPage extends Block {
           }
         },
       }),
+      ModalCloseButton: new Button({
+        className: "modal-close-button",
+        buttonIconSrc: CloseIcon,
+        onClick: () => this.closeModal(),
+      }),
       checkedIconSrc: CheckedIcon,
       formId: "messageForm",
-      isSearchUsers: false,
     });
 
     setTimeout(() => this.updateChats());
@@ -269,14 +358,19 @@ export class MessengerPage extends Block {
     return `
       <main>
         <div class="home-page-container">
-          <div class="chats-container">
+          <div class="chats-left-side-container">
             <div class="chats-header">
-              {{{ ButtonToProfile }}}
+              <div class="chats-header-buttons-container">
+                {{{ AddNewChatButton }}}
+                {{{ ButtonToProfile }}}
+               </div>
               
               {{{ SearchInput }}}
             </div>
 
-            {{{ Chats }}}
+            <div class="chats-container">
+              {{{ Chats }}}
+            </div>
           </div>
 
           <div class="chat-container">
@@ -284,13 +378,23 @@ export class MessengerPage extends Block {
               <div class="chat-user-info-wrapper">
                 <div class="chat-user-info-container">
                   <div class="chat-avatar-wrapper">
-                    {{{ UserAvatar }}}
+                    <input 
+                      type="file"
+                      id="avatar"
+                      name="avatar"
+                      accept="image/*"
+                      class="hidden-input"
+                    />
+                    {{{ ChatAvatar }}}
                   </div>
                   <p class="chat-preview-user-name">
                     {{ selectedChatTitle }}
                   </p>
                 </div>
-                {{{ DeleteChatButton }}}
+                <div class="chat-header-buttons-wrapper">
+                  {{{ UsersButton }}}
+                  {{{ DeleteChatButton }}}
+                 </div>
               </div>
 
               <div class="chat-history-container">
@@ -320,13 +424,26 @@ export class MessengerPage extends Block {
               </p>
             {{/if}}
           </div>
-        </div>
 
-        {{#if isSearchUsers}}
-          <div class="users-search-wrapper">
-            {{{ Users }}}
-          </div>
-        {{/if}}
+          {{#if isModalOpen}}
+            <div class="modal-wrapper">
+              <div class="modal">
+                {{{ ModalCloseButton }}}
+                <h3 class="modal-title">
+                  {{ modalTitle }}
+                </h3>
+
+                {{#if ModalContent}}
+                  {{{ ModalContent }}}
+                {{/if}}
+
+                {{#if ModalSubmitButton}}
+                  {{{ ModalSubmitButton }}}
+                {{/if}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
       </main>
     `;
   }

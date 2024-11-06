@@ -58,7 +58,7 @@ class EditItemField extends Block {
         type={{type}}
         name={{fieldName}}
         {{#if value}}
-          placeholder={{value}}
+          value={{value}}
         {{/if}}
       />
     `

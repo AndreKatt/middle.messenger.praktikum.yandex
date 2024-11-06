@@ -151,11 +151,23 @@ export default class Block {
     this._render()
   };
 
+  public deleteChilds = (...args: Array<keyof TBlockProps>): void => {
+    if (!args.length) {
+      return;
+    }
+
+    args.forEach(prop => {
+      delete this.children?.[prop];
+    })
+
+    this._render()
+  };
+
   get element(): HTMLElement | null {
     return this._element;
   }
 
-  private _render(): void {
+  public _render(): void {
     const propsAndStubs = { ...this.props };
     const _tmpId =  Math.floor(100000 + Math.random() * 900000);
     Object.entries(this.children).forEach(([key, child]) => {

@@ -2,7 +2,7 @@ import Block from "../../framework/Block";
 
 type TInputProps = {
   className: string;
-  onInput: (login: string) => Promise<void>;
+  onInput: (title: string) => Promise<void>;
 }
 
 export class SearchInput extends Block {

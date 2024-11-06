@@ -90,6 +90,11 @@ export class AuthForm extends Block {
             this.RouterService.go(Routes.MESSENGER);
             return;
           }
+
+          if (props.formType === "signin" &&  result.status === 401) {
+            this.RouterService.go(Routes.SIGN_UP);
+            return;
+          }
           const error = JSON.parse(result.response)?.reason;
 
           if ( error === "User already in system" ) {

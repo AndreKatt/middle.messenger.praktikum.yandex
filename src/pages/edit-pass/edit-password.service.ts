@@ -1,6 +1,6 @@
 import { TFormType, TUserFormData } from "../../features/edit-form/edit-form";
 import { Fetch } from "../../framework/Fetch";
-import { API_URL, getEndPoint } from "../../utils/getEndPoint";
+import { getEndPoint, userEndPoint } from "../../utils/getEndPoint";
 
 export class EditPasswordService {
   protected readonly requestService = new Fetch();
@@ -11,7 +11,7 @@ export class EditPasswordService {
   ) {
     try {
       const { status } = await this.requestService.put(
-        getEndPoint(API_URL, "user", formType),
+        getEndPoint(userEndPoint, formType),
         {
           data: JSON.stringify(formData),
           method: "PUT",

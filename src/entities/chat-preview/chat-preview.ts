@@ -17,7 +17,7 @@ export class ChatPreview extends Block {
     super({ 
       ...props,
       UserAvatar: new UserAvatar({
-        className: "chat-preview-avatar",
+        className: props.avatarImageSrc ? "chat-preview-avatar" : "chat-preview-avatar-placeholder",
         iconSrc: props.avatarIconSrc,
         imageSrc: props.avatarImageSrc,
       }),

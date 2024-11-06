@@ -1,6 +1,6 @@
 import { TFormType, TUserFormData } from "../../features/edit-form/edit-form";
 import { Fetch } from "../../framework/Fetch";
-import { API_URL, authEndPoint, getEndPoint } from "../../utils/getEndPoint";
+import { authEndPoint, getEndPoint, userEndPoint } from "../../utils/getEndPoint";
 
 export class EditProfileService {
   protected readonly requestService = new Fetch();
@@ -24,7 +24,7 @@ export class EditProfileService {
   ) {
     try {
       const { status } = await this.requestService.put(
-        getEndPoint(API_URL, "user", formType),
+        getEndPoint(userEndPoint, formType),
         {
           data: JSON.stringify(formData),
           method: "PUT",
@@ -36,6 +36,26 @@ export class EditProfileService {
       );
   
       return status;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  public async UploadAvatar(file: File) {
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const data = await this.requestService.put(
+        getEndPoint(userEndPoint, "profile", "avatar"),
+        {
+          data: formData,
+          method: "PUT",
+          timeout: 0,
+        }
+      );
+  
+      return data;
     } catch (e) {
       console.log(e);
     }

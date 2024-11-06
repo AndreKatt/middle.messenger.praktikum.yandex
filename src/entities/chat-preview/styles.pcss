@@ -14,10 +14,21 @@
   margin-right: 14px;
 }
 
+.chat-preview-avatar-placeholder,
 .chat-preview-avatar {
   height: 47px;
   width: 47px;
+}
 
+.chat-preview-avatar {
+  & img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
+}
+
+.chat-preview-avatar-placeholder {
   & img {
     height: 20px;
     width: 20px;

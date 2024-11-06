@@ -15,6 +15,7 @@ type TEditFormProps = {
   formType: TFormType;
   avatarImageSrc?: string;
   avatarIconSrc: string;
+  onUploadAvatar?: (file: File) => void;
   ProfileEditItems: {
     label: string;
     value?: string;
@@ -35,12 +36,44 @@ type TEditFormProps = {
 
 export class EditForm extends Block {
   constructor(props: TEditFormProps) {
+    let className: string;
+    const hasImage = !!props.avatarImageSrc;
+    const isProfile = props.formType === "profile";
+
+    if (isProfile) {
+      className = hasImage 
+        ? "edit-profile-change-avatar-wrapper"
+        : "edit-profile-change-avatar-placeholder-wrapper"
+    } else {
+      className = hasImage 
+        ? "edit-profile-avatar-wrapper"
+        : "edit-profile-avatar-placeholder-wrapper"
+    }
+
     super({ 
       ...props,
+      isProfile: isProfile,
       UserAvatar: new UserAvatar({
-        className: "edit-profile-avatar-wrapper",
+        className: className,
         iconSrc: props.avatarIconSrc,
-        imageSrc: props.avatarImageSrc,
+        imageSrc: hasImage ? props.avatarImageSrc : undefined,
+        onClick: () => {
+          if (isProfile) {
+            const fileInput = document.getElementById("avatar") as HTMLInputElement;
+            fileInput?.click();
+            fileInput.onchange = (e) => {
+              if (!props.onUploadAvatar) {
+                return;
+              }
+              const input = e.target as HTMLInputElement;
+              const file = input.files?.[0];
+
+              if (file) {
+                props.onUploadAvatar(file);
+              }
+            }
+          }
+        }
       }),
       ProfileEditItems: props.ProfileEditItems.map((field, idx) => 
         new ProfileEditItem({
@@ -71,7 +104,7 @@ export class EditForm extends Block {
         className: "submit-button",
         onClick: async () => {
           let hasErrors = false;
-          const userData: TUserFormData = {} as never;
+          const userData = {} as TUserFormData;
           const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
           const formData = new FormData(form);
 
@@ -113,6 +146,15 @@ export class EditForm extends Block {
   override render() {
     return `
       <div class="edit-form-container">
+        {{#if isProfile}}
+        <input 
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          class="hidden-input"
+        />
+        {{/if}}
         {{{ UserAvatar }}}
 
         <form id={{formId}}>

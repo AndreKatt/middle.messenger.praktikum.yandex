@@ -80,11 +80,20 @@ export class AuthForm extends Block {
           });
 
           if (hasErrors) return;
-          
           const result = await this.authService.PostUser(props.formType, userData);
 
-          if (result && result.status === 200) {
-            this.RouterService.go(Routes.MESSENGER)
+          if (!result) {
+            return;
+          }
+
+          if (result.status === 200) {
+            this.RouterService.go(Routes.MESSENGER);
+            return;
+          }
+          const error = JSON.parse(result.response)?.reason;
+
+          if ( error === "User already in system" ) {
+            this.RouterService.go(Routes.MESSENGER);
           }
         },
       }),

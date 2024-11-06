@@ -15,6 +15,10 @@ export class EditProfilePage extends Block {
     setTimeout(async () => {
       const result = await this.editFormService.GetUser();
       
+      if (!result) {
+        return;
+      }
+      
       if (result.status === 200) {
         const data = JSON.parse(result.response);
         const profileEditItems = [

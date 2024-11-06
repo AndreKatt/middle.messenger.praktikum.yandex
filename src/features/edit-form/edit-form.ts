@@ -24,7 +24,10 @@ type TEditFormProps = {
   }[];
   SubmitButton: {
     label: string;
-    onSubmit: (formType: TFormType, userData: TUserFormData) => Promise<number>
+    onSubmit: (
+      formType: TFormType,
+      userData: TUserFormData
+    ) => Promise<number | undefined>
   }
   cancelButtonLabel: string;
   formId: string;

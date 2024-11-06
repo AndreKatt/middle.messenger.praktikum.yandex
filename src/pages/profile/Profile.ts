@@ -77,6 +77,10 @@ export class ProfilePage extends Block {
 
     setTimeout(async () => {
       const result = await this.profileService.GetUser();
+
+      if (!result) {
+        return;
+      }
   
       if (result.status === 200) {
         const data = JSON.parse(result.response);

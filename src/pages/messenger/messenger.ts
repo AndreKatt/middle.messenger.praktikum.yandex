@@ -85,30 +85,33 @@ export class MessengerPage extends Block {
     if (socket) {
       this.socket = socket;
       socket.addEventListener('message', event => {
-        const data = JSON.parse(event.data);
-
-        if (Array.isArray(data)) {
-          this.selectedChat = data.reverse();
-          this.setProps({
-            selectedChatTitle: title,
-            Messages: this.selectedChat.map((message, idx) => {
-              let dateString = "";
-              if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
-                dateString = getDateString(message.time, true);
-              }
-
-              return new MessageItem({
-                text: message.content,
-                time: getTimeString(new Date(message.time)),
-                isChecked: message.is_read,
-                isCurrentUser: message.user_id == this.currentUserId,
-                date: dateString && dateString
-              })
-            }),
-            hasMessages: !!this.selectedChat.length,
-          });
-        } else if (data.type !== "pong") {
-          this.messengerService.GetChatMessages(socket);
+        try {
+          const data = JSON.parse(event.data);
+          if (Array.isArray(data)) {
+            this.selectedChat = data.reverse();
+            this.setProps({
+              selectedChatTitle: title,
+              Messages: this.selectedChat.map((message, idx) => {
+                let dateString = "";
+                if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
+                  dateString = getDateString(message.time, true);
+                }
+  
+                return new MessageItem({
+                  text: message.content,
+                  time: getTimeString(new Date(message.time)),
+                  isChecked: message.is_read,
+                  isCurrentUser: message.user_id == this.currentUserId,
+                  date: dateString && dateString
+                })
+              }),
+              hasMessages: !!this.selectedChat.length,
+            });
+          } else if (data.type !== "pong") {
+            this.messengerService.GetChatMessages(socket);
+          }
+        } catch (e) {
+          console.log(e);
         }
       });
     }
@@ -116,6 +119,9 @@ export class MessengerPage extends Block {
 
   protected async updateChats() {
     const result = await this.messengerService.GetChats();
+    if (!result) {
+      return;
+    }
 
     if (result.status === 200) {
       const chats: TChatData[] = JSON.parse(result.response);
@@ -155,10 +161,14 @@ export class MessengerPage extends Block {
             }
             const result = await this.messengerService.GetUsersByLogin(login);
 
+            if (!result) {
+              return;
+            }
+
             if (!this.chats.length) {
               const chatsResult = await this.messengerService.GetChats();
 
-              if (chatsResult.status === 200) {
+              if (chatsResult && chatsResult.status === 200) {
                 this.chats = JSON.parse(chatsResult.response);
               }
             }
@@ -212,9 +222,13 @@ export class MessengerPage extends Block {
         className: "chat-delete-button",
         onClick: async () => {
           if (this.currentChatId) {
-            const { status } = await this.messengerService.DeleteChatById(this.currentChatId)
+            const result = await this.messengerService.DeleteChatById(this.currentChatId)
 
-            if (status === 200) {
+            if (!result) {
+              return;
+            }
+
+            if (result.status === 200) {
               this.setProps({
                 selectedChatTitle: undefined,
               })

@@ -175,21 +175,15 @@ export class MessengerPage extends Block {
                   avatarIconSrc: PictureFillIcon,
                   avatarImageSrc: user.avatar,
                   onClick: async () => {
-                    let result;
-                    if (!this.chats.length) {
-                      result = await this.messengerService.PostChat(user.login, user.id);
-                    }
-                    const hasChat = this.chats.find(chat => chat?.last_message?.user?.login === user.login);
-                    if (!hasChat) {
-                      result = await this.messengerService.PostChat(user.login, user.id);
-                    }
+                    const result = await this.messengerService.PostChat(user.login, user.id);
 
-                    if (result || hasChat) {
+                    if (result) {
                       this.deleteLists("Users");
                       this.updateChats();
                       this.setProps({
                         selectedChatTitle: user.login,
                         hasMessages: false,
+                        isSearchUsers: false,
                       });
 
                       const chatId = JSON.parse(result).id;
@@ -197,11 +191,15 @@ export class MessengerPage extends Block {
                     }
                   },
                 })),
+                isSearchUsers: true,
               })
             }
             return;
           }
-          this.deleteLists("Users")
+          this.deleteLists("Users");
+          this.setProps({
+            isSearchUsers: false,
+          });
         }
       }),
       UserAvatar: new UserAvatar({
@@ -247,6 +245,7 @@ export class MessengerPage extends Block {
       }),
       checkedIconSrc: CheckedIcon,
       formId: "messageForm",
+      isSearchUsers: false,
     });
 
     setTimeout(() => this.updateChats());
@@ -309,9 +308,11 @@ export class MessengerPage extends Block {
           </div>
         </div>
 
-        <div class="users-search-wrapper">
-          {{{ Users }}}
-        </div>
+        {{#if isSearchUsers}}
+          <div class="users-search-wrapper">
+            {{{ Users }}}
+          </div>
+        {{/if}}
       </main>
     `;
   }

@@ -38,7 +38,7 @@ export class MessengerService {
       const data: { id: string } = JSON.parse(result.response);
 
       const { status } = await this.requestService.put(
-        getEndPoint(CHATS_ENDPOINT),
+        getEndPoint(CHATS_ENDPOINT, "users"),
         {
           data: JSON.stringify({
             users: [userId],

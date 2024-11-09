@@ -15,7 +15,7 @@ export class ChatUser extends Block {
     super({
       ...props,
       UserAvatar: new UserAvatar({
-        className: props.imageSrc ? "chat-img-avatar" : "chat-avatar",
+        className: props.imageSrc ? "full-chat-img-avatar" : "chat-avatar",
         iconSrc: PictureFillIcon,
         imageSrc: props.imageSrc,
       }),

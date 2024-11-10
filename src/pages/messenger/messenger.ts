@@ -101,7 +101,6 @@ export class MessengerPage extends Block {
   protected currentChatId: number | null = null;
 
   protected readonly messengerService = new MessengerService();
-  protected readonly currentUserId = localStorage.getItem("id");
 
   protected closeModal = () => {
     this.setProps({
@@ -111,7 +110,6 @@ export class MessengerPage extends Block {
   }
 
   protected setChats(chats: TChatData[]) {
-    this.deleteLists("Chats");
     if (!!chats.length) {
       this.setProps({
         Chats: chats.map(chat => new ChatPreview({
@@ -142,12 +140,17 @@ export class MessengerPage extends Block {
         onClick: () => {
           const fileInput = document.getElementById("avatar") as HTMLInputElement;
           fileInput?.click();
-          fileInput.onchange = (e) => {
+          fileInput.onchange = async (e) => {
             const input = e.target as HTMLInputElement;
             const file = input.files?.[0];
 
             if (file && this.currentChatId) {
-              this.messengerService.UploadAvatar(file, this.currentChatId);
+              const result = await this.messengerService.UploadAvatar(file, this.currentChatId);
+              if (result?.status === 200) {
+                const { id, title, avatar } = JSON.parse(result.response);
+                this.setChatData(title, id, avatar);
+                this.updateChats();
+              }
             }
           }
         }
@@ -173,7 +176,7 @@ export class MessengerPage extends Block {
                   text: message.content,
                   time: getTimeString(new Date(message.time)),
                   isChecked: message.is_read,
-                  isCurrentUser: message.user_id == this.currentUserId,
+                  isCurrentUser: message.user_id == localStorage.getItem("id"),
                   date: dateString && dateString
                 });
               }),
@@ -260,7 +263,11 @@ export class MessengerPage extends Block {
           if (!!title) {
             setTimeout(() => {
               const filteredChats = this.chats.filter(chat => chat.title.toLowerCase().includes(title.toLowerCase()));
-              this.setChats(filteredChats);
+              if (!!filteredChats.length) {
+                this.setChats(filteredChats);
+                return;
+              }
+              this.deleteLists("Chats");
             }, 800);
 
             return;

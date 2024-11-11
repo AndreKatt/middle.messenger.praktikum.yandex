@@ -70,7 +70,7 @@ export class ProfilePage extends Block {
           const result = await this.profileService.LogOut();
 
           if (result === 200) {
-            localStorage.removeItem("id");
+            sessionStorage.removeItem("id");
             this.RouterService.go(Routes.AUTH)
           }
         }

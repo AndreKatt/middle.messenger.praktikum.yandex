@@ -21,6 +21,7 @@ import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
 import CloseIcon from "../../assets/Close.svg";
 import UserIcon from "../../assets/User.svg";
 import "./styles.pcss";
+import { ProfileService } from "../profile/profile.service";
 
 type TChatUser = {
   avatar: string | null;
@@ -101,6 +102,7 @@ export class MessengerPage extends Block {
   protected currentChatId: number | null = null;
 
   protected readonly messengerService = new MessengerService();
+  protected readonly profileService = new ProfileService();
 
   protected closeModal = () => {
     this.setProps({
@@ -176,7 +178,7 @@ export class MessengerPage extends Block {
                   text: message.content,
                   time: getTimeString(new Date(message.time)),
                   isChecked: message.is_read,
-                  isCurrentUser: message.user_id == localStorage.getItem("id"),
+                  isCurrentUser: message.user_id == sessionStorage.getItem("id"),
                   date: dateString && dateString
                 });
               }),
@@ -186,6 +188,9 @@ export class MessengerPage extends Block {
             this.messengerService.GetChatMessages(socket);
           }
         } catch (e) {
+          this.profileService.LogOut();
+          this.RouterService.go(Routes.AUTH)
+          window.location.reload();
           console.log(e);
         }
       });

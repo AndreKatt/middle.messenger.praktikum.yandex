@@ -22,6 +22,7 @@ import CloseIcon from "../../assets/Close.svg";
 import UserIcon from "../../assets/User.svg";
 import "./styles.pcss";
 import { ProfileService } from "../profile/profile.service";
+import { MessageForm } from "../../entities/message-form";
 
 type TChatUser = {
   avatar: string | null;
@@ -226,6 +227,21 @@ export class MessengerPage extends Block {
     }
   }
 
+  protected sendMessage() {
+    const form = document.getElementById("messageForm") as HTMLFormElement;
+    const formData = new FormData(form);
+
+    if (this.socket) {
+      this.socket.send(JSON.stringify(
+        {
+          content: formData.get("message"),
+          type: "message"
+        }
+      ));
+      this.messengerService.GetChatMessages(this.socket);
+    }
+  }
+
   constructor() {
     super({
       AddNewChatButton: new Button({
@@ -339,28 +355,18 @@ export class MessengerPage extends Block {
         buttonIconSrc: ArrowRightPrimaryIcon,
         alt: "Отправить",
         className: "chat-message-send-button",
-        onClick: () => {
-          const form = document.getElementById("messageForm") as HTMLFormElement;
-          const formData = new FormData(form);
-
-          if (this.socket) {
-            this.socket.send(JSON.stringify(
-              {
-                content: formData.get("message"),
-                type: "message"
-              }
-            ));
-            this.messengerService.GetChatMessages(this.socket);
-          }
-        },
+        onClick: () => this.sendMessage(),
       }),
       ModalCloseButton: new Button({
         className: "modal-close-button",
         buttonIconSrc: CloseIcon,
         onClick: () => this.closeModal(),
       }),
+      MessageForm: new MessageForm({
+        formId: "messageForm",
+        onSubmit: () => this.sendMessage(),
+      }),
       checkedIconSrc: CheckedIcon,
-      formId: "messageForm",
     });
 
     setTimeout(() => this.updateChats());
@@ -421,13 +427,7 @@ export class MessengerPage extends Block {
 
               <div class="chat-message-input-wrapper">
                 {{{ AttachButton }}}
-                <form id={{formId}}>
-                  <input 
-                    class="chat-message-input"
-                    placeholder="Сообщение"
-                    name="message"
-                  />
-                </form>
+                {{{ MessageForm }}}
                 {{{ SendButton }}}
               </div>
             {{else}}

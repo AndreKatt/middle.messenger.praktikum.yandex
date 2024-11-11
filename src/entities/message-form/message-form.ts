@@ -14,10 +14,9 @@ export class MessageForm extends Block {
           if (e.code === "Enter") {
             e.preventDefault();
             const input = e.target as HTMLInputElement;
-            
+
             if (!!input.value) {
               props.onSubmit();
-              input.value = "";
             }
           }
         }

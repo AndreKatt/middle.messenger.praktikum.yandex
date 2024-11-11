@@ -112,6 +112,14 @@ export class MessengerPage extends Block {
     this.deleteLists("ModalContent");
   }
 
+  protected scrollToLastMessage() {
+    const chatContainer = document.getElementById("chat-container");
+    console.log(chatContainer)
+    if (chatContainer && chatContainer.lastElementChild) {
+      chatContainer.lastElementChild.scrollIntoView()
+    }
+  }
+
   protected setChats(chats: TChatData[]) {
     if (!!chats.length) {
       this.setProps({
@@ -185,8 +193,10 @@ export class MessengerPage extends Block {
               }),
               hasMessages: !!this.selectedChat.length,
             });
+            this.scrollToLastMessage();
           } else if (data.type !== "pong") {
             this.messengerService.GetChatMessages(socket);
+            this.scrollToLastMessage();
           }
         } catch (e) {
           this.profileService.LogOut();
@@ -230,6 +240,7 @@ export class MessengerPage extends Block {
   protected sendMessage() {
     const form = document.getElementById("messageForm") as HTMLFormElement;
     const formData = new FormData(form);
+    const input = document.getElementById("message") as HTMLFormElement;
 
     if (this.socket) {
       this.socket.send(JSON.stringify(
@@ -238,7 +249,9 @@ export class MessengerPage extends Block {
           type: "message"
         }
       ));
+      input.value = "";
       this.messengerService.GetChatMessages(this.socket);
+      this.scrollToLastMessage();
     }
   }
 
@@ -415,7 +428,7 @@ export class MessengerPage extends Block {
                  </div>
               </div>
 
-              <div class="chat-history-container">
+              <div id="chat-container" class="chat-history-container">
                 {{#if hasMessages}}
                   {{{ Messages }}}
                 {{else}}

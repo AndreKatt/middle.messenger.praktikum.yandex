@@ -125,11 +125,16 @@ class Router {
   }
 
   forward() {
-    this.history.go(1)
+    this.history.go(1);
   }
 
   getRoute(pathname: `${Routes}`) {
     return this.routes.find(route => route.match(pathname));
+  }
+
+  reassign(pathname: `${Routes}`, El: typeof Block) {
+    this.routes = this.routes.filter(route => !route.match(pathname));
+    this.use(pathname, El);
   }
 }
 

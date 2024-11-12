@@ -1,12 +1,13 @@
+import { getAvatarSrc } from "../../utils/getEndPoint";
 import { UserAvatar } from "../../entities/user-avatar";
 import { ProfileInfoItem } from "../../shared/profile-info-item";
 import { Button } from "../../shared/button";
 import { Routes } from "../../framework/Router";
 import { ProfileService } from "./profile.service";
+import { MessengerPage } from "../messenger";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
 import "./styles.pcss";
-import { getAvatarSrc } from "../../utils/getEndPoint";
 
 type TUserData = {
   email: string;
@@ -72,6 +73,7 @@ export class ProfilePage extends Block {
           if (result === 200) {
             sessionStorage.removeItem("id");
             this.RouterService.go(Routes.AUTH)
+            this.RouterService.reassign(Routes.MESSENGER, MessengerPage)
           }
         }
       }),

@@ -114,7 +114,6 @@ export class MessengerPage extends Block {
 
   protected scrollToLastMessage() {
     const chatContainer = document.getElementById("chat-container");
-    console.log(chatContainer)
     if (chatContainer && chatContainer.lastElementChild) {
       chatContainer.lastElementChild.scrollIntoView()
     }
@@ -200,7 +199,8 @@ export class MessengerPage extends Block {
           }
         } catch (e) {
           this.profileService.LogOut();
-          this.RouterService.go(Routes.AUTH)
+          this.RouterService.go(Routes.AUTH);
+          this.RouterService.reassign(Routes.MESSENGER, MessengerPage);
           window.location.reload();
           console.log(e);
         }
@@ -215,6 +215,7 @@ export class MessengerPage extends Block {
       this.chats = JSON.parse(result.response);
       this.setChats(this.chats);
     } else if (result?.status === 401) {
+      this.RouterService.reassign(Routes.MESSENGER, MessengerPage);
       this.RouterService.go(Routes.AUTH);
     }
   }

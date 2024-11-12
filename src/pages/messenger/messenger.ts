@@ -160,6 +160,8 @@ export class MessengerPage extends Block {
                 const { id, title, avatar } = JSON.parse(result.response);
                 this.setChatData(title, id, avatar);
                 this.updateChats();
+              } else if (result?.status === 413) {
+                alert("Изображение слишком большое!")
               }
             }
           }

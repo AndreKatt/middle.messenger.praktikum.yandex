@@ -71,7 +71,6 @@ export class ProfilePage extends Block {
           const result = await this.profileService.LogOut();
 
           if (result === 200) {
-            sessionStorage.removeItem("id");
             this.RouterService.go(Routes.AUTH)
             this.RouterService.reassign(Routes.MESSENGER, MessengerPage)
           }

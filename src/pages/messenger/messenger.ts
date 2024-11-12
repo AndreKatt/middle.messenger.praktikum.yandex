@@ -58,7 +58,7 @@ type TMessageData = {
   chat_id: number;
   time: string;
   type: string;
-  user_id: string;
+  user_id: number;
   content: string;
   is_read: boolean;
   file?: {
@@ -101,6 +101,7 @@ export class MessengerPage extends Block {
   protected socket: WebSocket | null = null;
   protected selectedChat: TMessageData[] = [];
   protected currentChatId: number | null = null;
+  protected currentUserId: number | null = null;
 
   protected readonly messengerService = new MessengerService();
   protected readonly profileService = new ProfileService();
@@ -168,7 +169,11 @@ export class MessengerPage extends Block {
         }
       }),
     });
-    const socket = await this.messengerService.ConnectToChat(chatId);
+    if (!this.currentUserId) {
+      return;
+    }
+
+    const socket = await this.messengerService.ConnectToChat(chatId, this.currentUserId);
 
     if (socket) {
       this.socket = socket;
@@ -188,7 +193,7 @@ export class MessengerPage extends Block {
                   text: message.content,
                   time: getTimeString(new Date(message.time)),
                   isChecked: message.is_read,
-                  isCurrentUser: message.user_id == sessionStorage.getItem("id"),
+                  isCurrentUser: message.user_id == this.currentUserId,
                   date: dateString && dateString
                 });
               }),
@@ -203,7 +208,6 @@ export class MessengerPage extends Block {
           this.profileService.LogOut();
           this.RouterService.go(Routes.AUTH);
           this.RouterService.reassign(Routes.MESSENGER, MessengerPage);
-          window.location.reload();
           console.log(e);
         }
       });
@@ -385,7 +389,14 @@ export class MessengerPage extends Block {
       checkedIconSrc: CheckedIcon,
     });
 
-    setTimeout(() => this.updateChats());
+    setTimeout(async () => {
+      this.updateChats();
+      const result = await this.messengerService.GetUser();
+      
+      if (result?.status === 200) {
+        this.currentUserId = JSON.parse(result.response)?.id;
+      }
+    });
   };
 
   override render() {

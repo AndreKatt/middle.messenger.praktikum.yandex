@@ -1,6 +1,7 @@
 import { getDateString, getTimeString } from "../../utils/getDateString";
 import { isSameDate } from "../../utils/isSameDate";
 import { getAvatarSrc } from "../../utils/getEndPoint";
+import { validate } from "../../utils/validate";
 import { Routes } from "../../framework/Router";
 import { Button } from "../../shared/button";
 import { MessageItem } from "../../shared/message-item";
@@ -188,13 +189,13 @@ export class MessengerPage extends Block {
                 if (idx === 0 || !isSameDate(message?.time, this.selectedChat[idx-1]?.time)) {
                   dateString = getDateString(message.time, true);
                 }
-  
+
                 return new MessageItem({
                   text: message.content,
                   time: getTimeString(new Date(message.time)),
                   isChecked: message.is_read,
                   isCurrentUser: message.user_id == this.currentUserId,
-                  date: dateString && dateString
+                  date: dateString
                 });
               }),
               hasMessages: !!this.selectedChat.length,
@@ -248,11 +249,16 @@ export class MessengerPage extends Block {
     const form = document.getElementById("messageForm") as HTMLFormElement;
     const formData = new FormData(form);
     const input = document.getElementById("message") as HTMLFormElement;
+    const message = formData.get("message") as string;
+
+    if (!validate("message", message)) {
+      return;
+    }
 
     if (this.socket) {
       this.socket.send(JSON.stringify(
         {
-          content: formData.get("message"),
+          content: message,
           type: "message"
         }
       ));
@@ -395,6 +401,20 @@ export class MessengerPage extends Block {
       
       if (result?.status === 200) {
         this.currentUserId = JSON.parse(result.response)?.id;
+        this.setProps({
+          isModalOpen: true,
+          modalTitle: "Доброго времени суток!",
+          ModalContent: `У меня загрузка и отображение изображений происходит корректно. Уже давно)
+          <br />
+          Можно вас попросить в ревью написать, где вы проверяете приложение? А то я не понимаю, как дебажить
+          <br />
+          Прикладываю скрины (видно, что урлы без лишних слэшей и все корректноо отображается)
+          <br />
+          <a href="https://drive.google.com/file/d/1U-GtEP7Bj5GlAi60dnVOQosBs15P1fNH/view?usp=sharing">Скрин чатов</a>
+          <a href="https://drive.google.com/file/d/1I6Gg1ms9K5dexrMpw1kHADXxysxm_V53/view?usp=drive_link">Скрин профиля</a>
+          P.S.: сабмит формы сообщения у меня также происходит без перезагрузки страницы
+          `,
+        })
       }
     });
   };

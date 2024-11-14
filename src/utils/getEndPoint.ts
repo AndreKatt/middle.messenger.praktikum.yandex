@@ -10,7 +10,7 @@ export const getEndPoint = (...args: string[]): string => {
       return str.slice(0, str.length - 1);
     }
     return str;
-  })
+  });
   
   return paths.join('/');
 };

@@ -4,6 +4,7 @@ import { Button } from "../../shared/button";
 import { ProfileEditItem } from "../../shared/profile-edit-item";
 import { Input } from "../../shared/input";
 import { Routes } from "../../framework/Router";
+import { ProfilePage } from "../../pages";
 import Block from "../../framework/Block";
 import "./styles.pcss";
 
@@ -129,6 +130,7 @@ export class EditForm extends Block {
           const status = await props.SubmitButton.onSubmit(props.formType, userData);
           
           if (status === 200) {
+            this.RouterService.reassign(Routes.PROFILE, ProfilePage);
             this.RouterService.go(Routes.PROFILE);
           } else if (status === 401) {
             this.RouterService.go(Routes.AUTH);
@@ -138,7 +140,10 @@ export class EditForm extends Block {
       CancelButton: new Button({
         label: props.cancelButtonLabel,
         className: "cancel-button",
-        onClick: () => this.RouterService.go(Routes.PROFILE),
+        onClick: () => {
+          this.RouterService.go(Routes.PROFILE);
+          this.RouterService.reassign(Routes.PROFILE, ProfilePage);
+        },
       }),
     });
   }

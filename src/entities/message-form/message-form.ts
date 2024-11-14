@@ -10,7 +10,7 @@ export class MessageForm extends Block {
     super({
       ...props,
       events: {
-        keydown: (e: KeyboardEvent) => {
+        keypress: (e: KeyboardEvent) => {
           if (e.code === "Enter") {
             e.preventDefault();
             const input = e.target as HTMLInputElement;

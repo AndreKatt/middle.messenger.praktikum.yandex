@@ -11,6 +11,8 @@ import { MessengerService } from "./messenger.service";
 import { SearchInput } from "../../shared/search-input";
 import { Input } from "../../shared/input";
 import { ChatUser } from "../../entities/chat-user";
+import { ProfileService } from "../profile/profile.service";
+import { MessageForm } from "../../entities/message-form";
 import Block from "../../framework/Block";
 import AddIcon from "../../assets/Add.svg";
 import ArrowRightIcon from "../../assets/ArrowRight.svg";
@@ -22,8 +24,6 @@ import ArrowRightPrimaryIcon from "../../assets/ArrowRightPrimary.svg";
 import CloseIcon from "../../assets/Close.svg";
 import UserIcon from "../../assets/User.svg";
 import "./styles.pcss";
-import { ProfileService } from "../profile/profile.service";
-import { MessageForm } from "../../entities/message-form";
 
 type TChatUser = {
   avatar: string | null;
@@ -401,20 +401,6 @@ export class MessengerPage extends Block {
       
       if (result?.status === 200) {
         this.currentUserId = JSON.parse(result.response)?.id;
-        this.setProps({
-          isModalOpen: true,
-          modalTitle: "Доброго времени суток!",
-          ModalContent: `У меня загрузка и отображение изображений происходит корректно. Уже давно)
-          <br />
-          Можно вас попросить в ревью написать, где вы проверяете приложение? А то я не понимаю, как дебажить
-          <br />
-          Прикладываю скрины (видно, что урлы без лишних слэшей и все корректноо отображается)
-          <br />
-          <a href="https://drive.google.com/file/d/1U-GtEP7Bj5GlAi60dnVOQosBs15P1fNH/view?usp=sharing">Скрин чатов</a>
-          <a href="https://drive.google.com/file/d/1I6Gg1ms9K5dexrMpw1kHADXxysxm_V53/view?usp=drive_link">Скрин профиля</a>
-          P.S.: сабмит формы сообщения у меня также происходит без перезагрузки страницы
-          `,
-        })
       }
     });
   };

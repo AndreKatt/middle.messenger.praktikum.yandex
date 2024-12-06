@@ -12,7 +12,7 @@ export const getEndPoint = (...args: string[]): string => {
     return str;
   });
   
-  return paths.join('/');
+  return encodeURI(paths.join('/'));
 };
 
 export const authEndPoint = getEndPoint(API_URL, "auth");

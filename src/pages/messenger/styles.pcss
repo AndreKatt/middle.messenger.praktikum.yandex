@@ -88,7 +88,8 @@
 
 .chats-container {
   height: calc(100vh - 105px);
-  overflow: scroll;
+  overflow-y: scroll;
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
@@ -169,12 +170,13 @@
 }
 
 .chat-history-container {
-  overflow: scroll;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 24px;
   position: relative;
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;

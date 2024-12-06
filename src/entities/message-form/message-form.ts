@@ -12,13 +12,16 @@ export class MessageForm extends Block {
       events: {
         keypress: (e: KeyboardEvent) => {
           if (e.code === "Enter") {
-            e.preventDefault();
             const input = e.target as HTMLInputElement;
 
             if (!!input.value) {
               props.onSubmit();
             }
           }
+        },
+        submit: (e: SubmitEvent) => {
+          e.preventDefault()
+          return false;
         }
       }
     });

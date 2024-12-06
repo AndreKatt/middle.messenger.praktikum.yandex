@@ -39,7 +39,7 @@ export const getDateString = (
     return `${dateDay}.${month}.${dateYear}`;
   }
 
-  if (todayDay > dateDay) {
+  if (todayDay > dateDay || todayMonth > dateMonth) {
     const month = `0${dateMonth}`.slice(-2);
 
     return `${dateDay}.${month}`;

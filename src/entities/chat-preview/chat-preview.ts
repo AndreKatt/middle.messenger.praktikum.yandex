@@ -9,6 +9,7 @@ type TChatPreviewProps = {
   newMessagesCount: number;
   avatarIconSrc: string;
   avatarImageSrc?: string;
+  onClick: () => Promise<void>;
 }
 
 export class ChatPreview extends Block {
@@ -16,10 +17,13 @@ export class ChatPreview extends Block {
     super({ 
       ...props,
       UserAvatar: new UserAvatar({
-        className: "chat-preview-avatar",
+        className: props.avatarImageSrc ? "chat-preview-avatar" : "chat-preview-avatar-placeholder",
         iconSrc: props.avatarIconSrc,
         imageSrc: props.avatarImageSrc,
-      })
+      }),
+      events: {
+        click: props.onClick,
+      }
     });
   }
 
@@ -30,7 +34,7 @@ export class ChatPreview extends Block {
           {{{ UserAvatar }}}
         </div>
 
-        <div>
+        <div class="chat-preview-text-info-container">
           <p class="chat-preview-user-name">
             {{userName}}
           </p>

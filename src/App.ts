@@ -1,7 +1,8 @@
+import Router, { Routes } from "./framework/Router";
 import { 
   EditPasswordPage,
   EditProfilePage,
-  HomePage,
+  MessengerPage,
   NotFoundPage, 
   ProfilePage, 
   ServerErrorPage, 
@@ -10,102 +11,18 @@ import {
 } from "./pages";
 
 export default class App {
-  protected state: TState;
-  protected appElement: HTMLElement | null;
-
-  constructor() {
-    this.state = {
-      currentPage: window.location.pathname as TState["currentPage"],
-    };
-
-    this.appElement = document.getElementById("app");
-  }
-
-  protected attachEventListeners() {
-    const links = document.querySelectorAll(".link");
-    links.forEach(el => {
-      el.addEventListener("click", (e) => {
-        const link = e.target as HTMLLinkElement;
-        e.preventDefault();
-        if (link.dataset.page) {
-          this.ChangePage(link.dataset.page as TState["currentPage"]);
-        }
-      })
-    })
-  }
+  public readonly routerService = Router;
 
   public Render() {
-    if (this.state.currentPage === "/auth") {
-      const page = new SignInPage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/signUp") {
-      const page = new SignUpPage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/home") {
-      const page = new HomePage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/profile") {
-      const page = new ProfilePage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/edit") {
-      const page = new EditProfilePage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/editPassword") {
-      const page = new EditPasswordPage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/404") {
-      const page = new NotFoundPage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-
-    if (this.state.currentPage === "/error") {
-      const page = new ServerErrorPage();
-      if (this.appElement) {
-        this.appElement.replaceChildren(page.getContent());
-      }
-    }
-    this.attachEventListeners();
+    this.routerService
+      .use(Routes.AUTH, SignInPage)
+      ?.use(Routes.SIGN_UP, SignUpPage)
+      ?.use(Routes.PROFILE, ProfilePage)
+      ?.use(Routes.MESSENGER, MessengerPage)
+      ?.use(Routes.SETTINGS, EditProfilePage)
+      ?.use(Routes.PASSWORD_SETTINGS, EditPasswordPage)
+      ?.use(Routes.NOT_FOUND, NotFoundPage)
+      ?.use(Routes.ERROR, ServerErrorPage)
+      ?.start();
   }
-
-  public ChangePage(page: TState["currentPage"]) {
-    this.state.currentPage = page;
-    this.Render();
-  }
-};
-
-type TState = {
-  currentPage: "/auth" 
-    | "/signUp" 
-    | "/profile" 
-    | "/404" 
-    | "/error"
-    | "/home"
-    | "/edit"
-    | "/editPassword";
 };

@@ -26,7 +26,7 @@ export class Button extends Block {
         {{/if}}
         
         {{#if buttonIconSrc}}
-          <img src={{buttonIconSrc}} alt={{alt}} />
+          <img class="button-image" src={{buttonIconSrc}} alt={{alt}} />
         {{/if}}
       </button>
     `;

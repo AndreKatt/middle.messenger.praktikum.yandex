@@ -1,10 +1,13 @@
 import { validate } from "../../utils/validate";
 import { Button } from "../../shared/button";
 import { Input } from "../../shared/input";
+import { Routes } from "../../framework/Router";
 import Block from "../../framework/Block";
 import "./styles.pcss";
+import { AuthService, TFormType, TUserFormData } from "./auth.service";
 
 type TAuthFormProps = {
+  formType: TFormType;
   title?: string;
   formId: string;
   AuthFields: {
@@ -20,6 +23,8 @@ type TAuthFormProps = {
 }
 
 export class AuthForm extends Block {
+  protected readonly authService = new AuthService();
+
   constructor(props: TAuthFormProps) {
     super({ 
       ...props,
@@ -52,29 +57,49 @@ export class AuthForm extends Block {
       SubmitButton: new Button({
         label: props.submitButtonLabel,
         className: "auth-submit-button",
-        onClick: () => {
+        onClick: async () => {
           let hasErrors = false;
+          const userData: TUserFormData = {} as never;
           const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
           const formData = new FormData(form);
 
           props.AuthFields.forEach((field, idx) => {
             const fieldValue = formData.get(field.inputName);
             const errMessage = validate(field.inputName, fieldValue as string, true);
-            if (errMessage) {
+            if (errMessage || !fieldValue) {
               hasErrors = true;
               const field = this.lists.AuthFields[idx] as Input;
               field.setProps({
                 error: errMessage,
                 inputClassName: "field-input-error",
               });
+
               return;
             }
-            console.log(`${field.inputName}: ${fieldValue}`);
+            userData[field.inputName as keyof TUserFormData] = fieldValue as string;
           });
 
           if (hasErrors) return;
+          const result = await this.authService.PostUser(props.formType, userData);
 
-          this.AppService.ChangePage("/profile")
+          if (!result) {
+            return;
+          }
+
+          if (result.status === 200) {
+            this.RouterService.go(Routes.MESSENGER);
+            return;
+          }
+
+          if (props.formType === "signin" &&  result.status === 401) {
+            this.RouterService.go(Routes.SIGN_UP);
+            return;
+          }
+          const error = JSON.parse(result.response)?.reason;
+
+          if ( error === "User already in system" ) {
+            this.RouterService.go(Routes.MESSENGER);
+          }
         },
       }),
       SignButton: new Button({

@@ -5,9 +5,9 @@ type TInputProps = {
   inputId?: string;
   label: string;
   inputName: string;
-  containerClassName: string;
-  labelClassName: string;
-  inputClassName: string;
+  containerClassName?: string;
+  labelClassName?: string;
+  inputClassName?: string;
   error?: string;
   onBlur?: () => void;
 }

@@ -1,8 +1,8 @@
-import App from '../App';
 import EventBus, { EventCallback } from './EventBus';
 import Handlebars from 'handlebars';
+import Router from './Router';
 
-interface BlockProps {
+export type TBlockProps = {
   [key: string]: unknown;
 }
 
@@ -14,17 +14,17 @@ enum Events {
 }
 
 export default class Block {
-  public readonly AppService = new App();
+  public readonly RouterService = Router;
 
   protected _element: HTMLElement | null = null;
   protected _id: number = Math.floor(100000 + Math.random() * 900000);
-  protected props: BlockProps;
+  protected props: TBlockProps;
   protected children: Record<string, Block>;
   protected lists: Record<string, unknown[]>;
 
   protected eventBus: () => EventBus;
 
-  constructor(propsWithChildren: BlockProps = {}) {
+  constructor(propsWithChildren: TBlockProps = {}) {
     const eventBus = new EventBus();
     const { props, children, lists } = this._getChildrenPropsAndProps(propsWithChildren);
     this.props = this._makePropsProxy({ ...props });
@@ -81,7 +81,7 @@ export default class Block {
     this.eventBus().emit(Events.FLOW_CDM);
   }
 
-  private _componentDidUpdate(/*oldProps: BlockProps, newProps: BlockProps*/): void {
+  private _componentDidUpdate(/*oldProps: TBlockProps, newProps: TBlockProps*/): void {
     const response = this.componentDidUpdate(/*oldProps, newProps*/);
     if (!response) {
       return;
@@ -89,17 +89,17 @@ export default class Block {
     this._render();
   }
 
-  protected componentDidUpdate(/*oldProps: BlockProps, newProps: BlockProps*/): boolean {
+  protected componentDidUpdate(/*oldProps: TBlockProps, newProps: TBlockProps*/): boolean {
     return true;
   }
 
-  private _getChildrenPropsAndProps(propsAndChildren: BlockProps): {
+  private _getChildrenPropsAndProps(propsAndChildren: TBlockProps): {
     children: Record<string, Block>,
-    props: BlockProps,
+    props: TBlockProps,
     lists: Record<string, unknown[]>
   } {
     const children: Record<string, Block> = {};
-    const props: BlockProps = {};
+    const props: TBlockProps = {};
     const lists: Record<string, unknown[]> = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
@@ -127,19 +127,47 @@ export default class Block {
     });
   }
 
-  public setProps = (nextProps: BlockProps): void => {
+  public setProps = (nextProps: TBlockProps): void => {
     if (!nextProps) {
       return;
     }
+    const { props, children, lists } = this._getChildrenPropsAndProps(nextProps);
 
-    Object.assign(this.props, nextProps);
+    Object.assign(this.props, props);
+    Object.assign(this.children, children);
+    Object.assign(this.lists, lists);
+    this._render();
+  };
+
+  public deleteLists = (...args: Array<keyof TBlockProps>): void => {
+    if (!args.length) {
+      return;
+    }
+
+    args.forEach(prop => {
+      delete this.lists?.[prop];
+    })
+
+    this._render()
+  };
+
+  public deleteChilds = (...args: Array<keyof TBlockProps>): void => {
+    if (!args.length) {
+      return;
+    }
+
+    args.forEach(prop => {
+      delete this.children?.[prop];
+    })
+
+    this._render()
   };
 
   get element(): HTMLElement | null {
     return this._element;
   }
 
-  private _render(): void {
+  public _render(): void {
     const propsAndStubs = { ...this.props };
     const _tmpId =  Math.floor(100000 + Math.random() * 900000);
     Object.entries(this.children).forEach(([key, child]) => {
@@ -195,15 +223,15 @@ export default class Block {
     return this._element;
   }
 
-  private _makePropsProxy(props: BlockProps): BlockProps {
+  private _makePropsProxy(props: TBlockProps): TBlockProps {
     const eventBusBinded = () => this.eventBus();
 
     return new Proxy(props, {
-      get(target: BlockProps, prop: string) {
+      get(target: TBlockProps, prop: string) {
         const value = target[prop];
         return typeof value === 'function' ? value.bind(target) : value;
       },
-      set(target: BlockProps, prop: string, value: unknown) {
+      set(target: TBlockProps, prop: string, value: unknown) {
         const oldTarget = { ...target };
         target[prop] = value;
         eventBusBinded().emit(Events.FLOW_CDU, oldTarget, target);
@@ -217,19 +245,5 @@ export default class Block {
 
   private _createDocumentElement(tagName: string): HTMLTemplateElement {
     return document.createElement(tagName) as HTMLTemplateElement;
-  }
-
-  public show(): void {
-    const content = this.getContent();
-    if (content) {
-      content.style.display = 'block';
-    }
-  }
-
-  public hide(): void {
-    const content = this.getContent();
-    if (content) {
-      content.style.display = 'none';
-    }
   }
 };

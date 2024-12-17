@@ -1,37 +1,83 @@
 import { validate } from "../../utils/validate";
-import { UserAvatar } from "../user-avatar";
+import { UserAvatar } from "../../entities/user-avatar";
 import { Button } from "../../shared/button";
 import { ProfileEditItem } from "../../shared/profile-edit-item";
 import { Input } from "../../shared/input";
+import { Routes } from "../../framework/Router";
+import { ProfilePage } from "../../pages";
 import Block from "../../framework/Block";
 import "./styles.pcss";
 
+export type TUserFormData = Record<string, string>;
+
+export type TFormType = "profile" | "password";
+
 type TEditFormProps = {
+  formType: TFormType;
   avatarImageSrc?: string;
   avatarIconSrc: string;
+  onUploadAvatar?: (file: File) => void;
   ProfileEditItems: {
     label: string;
     value?: string;
     fieldName: string;
     type: string;
     inputId: string;
-  }[]
-  submitButtonLabel: string;
+  }[];
+  SubmitButton: {
+    label: string;
+    onSubmit: (
+      formType: TFormType,
+      userData: TUserFormData
+    ) => Promise<number | undefined>
+  }
   cancelButtonLabel: string;
   formId: string;
 }
 
 export class EditForm extends Block {
   constructor(props: TEditFormProps) {
+    let className: string;
+    const hasImage = !!props.avatarImageSrc;
+    const isProfile = props.formType === "profile";
+
+    if (isProfile) {
+      className = hasImage 
+        ? "edit-profile-change-avatar-wrapper"
+        : "edit-profile-change-avatar-placeholder-wrapper"
+    } else {
+      className = hasImage 
+        ? "edit-profile-avatar-wrapper"
+        : "edit-profile-avatar-placeholder-wrapper"
+    }
+
     super({ 
       ...props,
+      isProfile: isProfile,
       UserAvatar: new UserAvatar({
-        className: "edit-profile-avatar-wrapper",
+        className: className,
         iconSrc: props.avatarIconSrc,
-        imageSrc: props.avatarImageSrc,
+        imageSrc: hasImage ? props.avatarImageSrc : undefined,
+        onClick: () => {
+          if (isProfile) {
+            const fileInput = document.getElementById("avatar") as HTMLInputElement;
+            fileInput?.click();
+            fileInput.onchange = (e) => {
+              if (!props.onUploadAvatar) {
+                return;
+              }
+              const input = e.target as HTMLInputElement;
+              const file = input.files?.[0];
+
+              if (file) {
+                props.onUploadAvatar(file);
+              }
+            }
+          }
+        }
       }),
       ProfileEditItems: props.ProfileEditItems.map((field, idx) => 
-        new ProfileEditItem({ 
+        new ProfileEditItem({
           ...field,
           inputClassName: "edit-profile-input",
           onBlur: () => {
@@ -55,10 +101,11 @@ export class EditForm extends Block {
         })
       ),
       SubmitButton: new Button({
-        label: props.submitButtonLabel,
+        label: props.SubmitButton.label,
         className: "submit-button",
-        onClick: () => {
+        onClick: async () => {
           let hasErrors = false;
+          const userData = {} as TUserFormData;
           const form = document.getElementById(`${props.formId}`) as HTMLFormElement;
           const formData = new FormData(form);
 
@@ -75,19 +122,28 @@ export class EditForm extends Block {
 
               return;
             }
-            console.log(`${field.fieldName}: ${fieldValue}`);
+            userData[field.fieldName as keyof TUserFormData] = fieldValue as string;
           });
 
           if (hasErrors) return;
 
-          this.AppService.ChangePage("/profile");
+          const status = await props.SubmitButton.onSubmit(props.formType, userData);
+          
+          if (status === 200) {
+            this.RouterService.reassign(Routes.PROFILE, ProfilePage);
+            this.RouterService.go(Routes.PROFILE);
+          } else if (status === 401) {
+            this.RouterService.go(Routes.AUTH);
+          }
         },
-
       }),
       CancelButton: new Button({
         label: props.cancelButtonLabel,
         className: "cancel-button",
-        onClick: () => this.AppService.ChangePage("/profile"),
+        onClick: () => {
+          this.RouterService.go(Routes.PROFILE);
+          this.RouterService.reassign(Routes.PROFILE, ProfilePage);
+        },
       }),
     });
   }
@@ -95,6 +151,15 @@ export class EditForm extends Block {
   override render() {
     return `
       <div class="edit-form-container">
+        {{#if isProfile}}
+        <input 
+          type="file"
+          id="avatar"
+          name="avatar"
+          accept="image/*"
+          class="hidden-input"
+        />
+        {{/if}}
         {{{ UserAvatar }}}
 
         <form id={{formId}}>

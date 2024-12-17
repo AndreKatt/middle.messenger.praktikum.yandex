@@ -1,17 +1,28 @@
-import { EditForm } from "../../entities/edit-form";
+import { EditForm } from "../../features/edit-form";
 import { editPassFields } from "../../assets";
 import Block from "../../framework/Block";
 import PictureFillIcon from "../../assets/PictureFill.svg";
+import { EditPasswordService } from "./edit-password.service";
+import { TFormType, TUserFormData } from "../../features/edit-form/edit-form";
 
 export class EditPasswordPage extends Block {
+  protected readonly editFormService = new EditPasswordService();
   constructor() {
     super({
       EditForm: new EditForm({
+        formType: "password",
         avatarIconSrc: PictureFillIcon,
-        submitButtonLabel: "Сохранить",
         cancelButtonLabel: "Отмена",
         ProfileEditItems: editPassFields,
         formId: "formEditPassword",
+        SubmitButton: {
+          label: "Сохранить",
+          onSubmit: async (formType: TFormType, userData: TUserFormData) => {
+            const status = await this.editFormService.PutUser(formType, userData);
+
+            return status;
+          },
+        }
       }),
     });
   }

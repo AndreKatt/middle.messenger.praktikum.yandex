@@ -29,7 +29,7 @@ export default [
         tsconfigRootDir: __dirname,
       },
     },
-    plugins: {...pluginTs, ...pluginJs},
+    plugins: {...pluginTs},
     rules: {
       'react/jsx-filename-extension': 'off',
       'import/extensions': 'off',
@@ -43,7 +43,7 @@ export default [
       "@typescript-eslint/ban-ts-comment": "error"
     }
   },
-  // pluginJs.configs.recommended,
+  pluginJs.configs.recommended,
   airbnb.rules,
   ...tseslint.configs.recommended,
 ];

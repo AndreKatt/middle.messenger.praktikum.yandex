@@ -14,7 +14,7 @@ export class MessageForm extends Block {
           if (e.code === "Enter") {
             const input = e.target as HTMLInputElement;
 
-            if (!!input.value) {
+            if (input.value) {
               props.onSubmit();
             }
           }

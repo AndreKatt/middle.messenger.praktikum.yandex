@@ -122,7 +122,7 @@ export class MessengerPage extends Block {
   }
 
   protected setChats(chats: TChatData[]) {
-    if (!!chats.length) {
+    if (chats.length) {
       this.setProps({
         Chats: chats.map(chat => new ChatPreview({
           userName: chat.title,
@@ -307,10 +307,10 @@ export class MessengerPage extends Block {
       SearchInput: new SearchInput({
         className: "chats-search-input",
         onInput: async(title) => {
-          if (!!title) {
+          if (title) {
             setTimeout(() => {
               const filteredChats = this.chats.filter(chat => chat.title.toLowerCase().includes(title.toLowerCase()));
-              if (!!filteredChats.length) {
+              if (filteredChats.length) {
                 this.setChats(filteredChats);
                 return;
               }

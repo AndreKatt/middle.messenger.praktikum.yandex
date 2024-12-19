@@ -32,23 +32,21 @@ export const getDateString = (
       return "Сегодня";
     }
   }
-
+  const month = `0${dateMonth}`.slice(-2);
+  const day = `0${dateDay}`.slice(-2);
+  
   if (todayYear !== dateYear) {
-    const month = `0${dateMonth}`.slice(-2);
-    
-    return `${dateDay}.${month}.${dateYear}`;
+    return `${day}.${month}.${dateYear}`;
   }
 
   if (todayDay > dateDay || todayMonth > dateMonth) {
-    const month = `0${dateMonth}`.slice(-2);
-
-    return `${dateDay}.${month}`;
+    return `${day}.${month}`;
   }
 
   return "";
 };
 
-export const getTimeString = (date: Date) => {
+export const getTimeString = (date: Date): string => {
   const hours = `0${date.getHours()}`.slice(-2);
   const minutes = `0${date.getMinutes()}`.slice(-2);
 

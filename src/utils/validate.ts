@@ -23,7 +23,7 @@ export const validate = (
   }
 
   if (fieldName === "phone") {
-    const isValid = /^[\+ ]?\d{10,15}$/.test(value);
+    const isValid = /^[+ ]?\d{10,15}$/.test(value);
 
     return !isValid && errorMessage[fieldName];
   }
@@ -47,7 +47,7 @@ export const validate = (
   }
 
   if (fieldName === "first_name" || fieldName === "second_name") {
-    const isValid = /^[А-ЯA-Z][а-яa-z\-]*$/.test(value);
+    const isValid = /^[А-ЯA-Z][а-яa-z-]*$/.test(value);
 
     return !isValid && errorMessage[fieldName];
   }

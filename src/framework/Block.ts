@@ -151,7 +151,7 @@ export default class Block {
     this._render()
   };
 
-  public deleteChilds = (...args: Array<keyof TBlockProps>): void => {
+  public deleteChildren = (...args: Array<keyof TBlockProps>): void => {
     if (!args.length) {
       return;
     }

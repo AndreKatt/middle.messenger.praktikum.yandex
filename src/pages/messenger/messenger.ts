@@ -343,7 +343,7 @@ export class MessengerPage extends Block {
         buttonIconSrc: UserIcon,
         className: "chat-delete-button",
         onClick: async () => {
-          this.deleteChilds("ModalContent");
+          this.deleteChildren("ModalContent");
           this.updateChatUsers();
           this.setProps({
             isModalOpen: true,

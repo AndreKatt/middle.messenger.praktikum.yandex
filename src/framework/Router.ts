@@ -15,7 +15,7 @@ type TRouteProps = {
   rootQuery: string;
 }
 
-const isEqual = (lhs: string, rhs: string) => {
+export const isEqual = (lhs: string, rhs: string) => {
   return lhs === rhs;
 }
 

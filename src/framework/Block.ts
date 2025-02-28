@@ -71,11 +71,8 @@ export default class Block {
   }
 
   private _componentDidMount(): void {
-    this.componentDidMount();
     Object.values(this.children).forEach(child => {child.dispatchComponentDidMount();});
   }
-
-  protected componentDidMount(): void {}
 
   public dispatchComponentDidMount(): void {
     this.eventBus().emit(Events.FLOW_CDM);
@@ -151,7 +148,7 @@ export default class Block {
     this._render()
   };
 
-  public deleteChilds = (...args: Array<keyof TBlockProps>): void => {
+  public deleteChildren = (...args: Array<keyof TBlockProps>): void => {
     if (!args.length) {
       return;
     }
